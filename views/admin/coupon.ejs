@@ -1,0 +1,185 @@
+<%- include('../layout/adminheader.ejs')%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Coupons</title>
+    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+    <style>
+        .nav-link.coupon {
+            color: rgb(242, 129, 35);
+        }
+        body {
+            background-color: rgba(255, 255, 255, 0.9);
+            color: black !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- breadcrumb-section -->
+    <div class="breadcrumb-section " style="background-image: url(/public/images/appimages/IMG_6926\ \(2\)\ \(1\).JPG)"></div>
+    <!-- end breadcrumb section -->
+
+    <div class="container mt-80" style="position: relative;">
+        <div class="" style="position: absolute;right: 0;">
+            <button class="btn btn-secondary" onclick="history.back()">Go Back</button>
+        </div>
+    </div>
+
+    <div class="container m-4">
+        <a href=""class="btn" style="color: #fff;font-weight: bold; background-color:rgb(242, 129, 35); ;  " data-toggle="modal" data-target="#addCouponModal">ADD COUPON</a>
+    </div>
+
+    <!-- start of add coupon  -->
+                              
+    <div class="modal fade mt-80" id="addCouponModal" tabindex="-1" role="dialog" aria-labelledby="addCouponModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+          <div class="modal-content">
+              <div class="modal-header" style="background-color: #000;" >
+                  <h5 class="modal-title" style="color: rgb(242, 129, 35);"id="">Add Coupon</h5>
+                  <button type="button"  style="color: rgb(242, 129, 35);" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+              <div class="modal-body">
+                  <!-- Coupon form -->
+                  <form id="" action="/admin/addcoupon" method="post">
+                      <div class="form-group">
+                          <input type="text" hidden value="" name="couponid" id="">
+                          <label for="">Coupon code</label>
+                          <input type="text" class="form-control" id="" name="code" required>
+                      </div>
+                      <div class="form-group">
+                          <label for="">Offer (%)</label>
+                          <input type="number" class="form-control" id="" name="offer" required>
+                      </div>
+                      <div class="form-group">
+                          <label for="">Price Above</label>
+                          <input type="number" class="form-control" id="" name="price" required>
+                      </div>
+                      <div class="form-group">
+                          <label for="">Expiry Date</label>
+                          <input type="date" class="form-control" id="" name="date"  required>
+                      </div>
+                      <button type="submit" class="btn btn-primary">Add Coupon</button>
+                  </form>
+              </div>
+          </div>
+      </div>
+  </div>
+
+<!-- end of add coupon -->
+
+
+
+
+
+
+    <section>
+        <div class="container mt-5 mb-80">
+            <div class="container-fluid">
+                <% if(typeof message!=='undefined'){%>
+                    <div style=" text-align: center; width: 100%;">
+                        <a style=" text-align: center;font-weight: bold; font-size: larger; color:  rgb(242, 129, 35);"><%=message%></a>
+                  </div>
+                <%  }%>
+                <table id="table1" class="table mt-4" style="color: #000;">
+                    <thead>
+                        <tr style="color: #000;">
+                            <th scope="col">No</th>
+                            <th scope="col">Coupon code</th>
+                            <th scope="col">Offer (%)</th>
+                            <th scope="col">Price Above</th>
+                            <th scope="col">Expiry Date</th>
+                            <th scope="col">Options</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                         
+                        <% if(coupon.length > 0) {
+                            for(let i = 0; i < coupon.length; i++) { %>
+                                <tr>
+                                    <th><%- i+1 %></th>
+                                    <td><%= coupon[i].code %></td>
+                                    <td><%= coupon[i].offer %></td>
+                                    <td>₹ <%= coupon[i].price %></td>
+                                    <td><%= date[i].date %></td>
+                                    <td>
+                                        <a href="/admin/deleteproduct?id=<%= coupon[i]._id %>">
+                                            <button class="btn btn-danger ublock" onclick="return confirm('Do you want to delete the product <%= coupon[i].code %>?')">Delete</button>
+                                            </a>
+                                        </a>
+                                        <button style="width: 70px;" class="btn btn-primary editCouponButton" data-toggle="modal" data-target="#editCouponModal<%= coupon[i]._id %>">Edit</button>
+                                        </a>
+                                    </td>
+                                </tr>
+
+                                <!-- Edit Coupon Modal -->
+                                <div class="modal fade mt-80" id="editCouponModal<%= coupon[i]._id %>" tabindex="-1" role="dialog" aria-labelledby="editCouponModalLabel<%= coupon[i]._id %>" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header" style="background-color: #000;" >
+                                                <h5 class="modal-title" style="color: rgb(242, 129, 35);"id="editCouponModalLabel<%= coupon[i]._id %>">Edit Coupon</h5>
+                                                <button type="button"  style="color: rgb(242, 129, 35);" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <!-- Coupon form -->
+                                                <form id="editCouponForm<%= coupon[i]._id %>" action="/admin/editcoupon" method="post">
+                                                    <div class="form-group">
+                                                        <input type="text" hidden value="<%=coupon[i]._id%>" name="couponid" id="editCouponCode<%= coupon[i]._id %>">
+                                                        <label for="editCouponCode<%= coupon[i]._id %>">Coupon code</label>
+                                                        <input type="text" class="form-control" id="editCouponCode<%= coupon[i]._id %>" name="editCouponCode" value="<%= coupon[i].code %>" required>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="editCouponOffer<%= coupon[i]._id %>">Offer (%)</label>
+                                                        <input type="number" class="form-control" id="editCouponOffer<%= coupon[i]._id %>" name="editCouponOffer" value="<%= coupon[i].offer %>" required>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="editCouponPrice<%= coupon[i]._id %>">Price Above</label>
+                                                        <input type="number" class="form-control" id="editCouponPrice<%= coupon[i]._id %>" name="editCouponPrice" value="<%= coupon[i].price %>" required>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="editCouponExpiry<%= coupon[i]._id %>">Expiry Date</label>
+                                                        <input type="date" class="form-control" id="editCouponExpiry<%= coupon[i]._id %>" name="editCouponDate" value="<%= coupon[i].date %>" required>
+                                                    </div>
+                                                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+<!-- end of edit  -->
+                            <% } }
+                            else { %>
+                                <tr>
+                                    <td colspan="5">Page is empty</td>
+                                </tr>
+                            <% } %> 
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.2/js/dataTables.bootstrap4.min.js"></script>
+    <script src="//cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#table1').DataTable();
+        });
+
+        // Handle edit coupon button click
+        $('.editCouponButton').on('click', function() {
+            var modalId = $(this).data('target');
+            $(modalId).modal('show');
+        });
+    </script>
+</body>
+</html>
+<%- include('../layout/adminfooter.ejs')%>

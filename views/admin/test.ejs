@@ -1,0 +1,109 @@
+
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+<title></title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+<!-- Custom Theme files -->
+<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
+<!-- //Custom Theme files -->
+<!-- web font -->
+<link href="//fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i" rel="stylesheet">
+<!-- //web font -->
+<link href="/public/stylesheet/home.css" rel="stylesheet">
+</head>
+
+<body>
+	<!-- main -->
+    <%- include('../layout/adminheader.ejs') %>
+    <div class="container">
+        <div class="m-5">
+            <div class="row">
+                <div class="col-md-6 offset-md-3">
+                    <form class="signup-form" action="/admin/updatebook" method="post"
+                        enctype="multipart/form-data">
+                        <h2>Edit Product</h2>
+                        <p>make changeshfv cgfxgfxgf inside the field and update it</p>
+
+                        <div class="form-group">
+                            <label for="">Product Name</label>
+                            <input type="text" class="form-control" id="bname" name="name" required
+                                value="<%= product.name %>">
+                        </div>
+                        <div class="form-group">
+                            <label for="">Brand Name</label>
+                            <input type="text" class="form-control" id="aname" name="author" required
+                                value="<%= product.brand %>">
+                        </div>
+                        <div class="form-group">
+                            <label for="">Category</label>
+                            <input type="text" class="form-control" id="page" name="pages" required
+                                value="<%= product.category %>">
+                        </div>
+                        <div class="form-group">
+                            <label for="">Sub category</label>
+                            <input type="text" class="form-control" id="cat" name="category" required
+                                value="<%= product.subcategory %>">
+                        </div>
+                        <div class="form-group">
+                            <label for="">Price</label>
+                            <input type="text" class="form-control" id="lang" name="language" required
+                                value="<%= product.price %>">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="pr" name="id" required hidden
+                                value="<%= product._id %>">
+                        </div>
+                        <div class="form-group">
+                            <label for="stk">Stock</label>
+                            <input type="text" class="form-control" id="stk" name="stock" required
+                                value="<%= product.stock %>">
+                        </div>
+                        <div>
+                            <%for(let i=0; i<product.image.length; i++) { %>
+                                <img class="imagepreview" src="/public/images/product/<%=product.image[i] %>" alt="image">
+                                <% } %>
+                        </div>
+                        <button type="submit" class="btn btn-block">Update</button>
+                        <div>
+                            <% if(typeof message !=='undefined' ) {%>
+                                <p style="color: rgb(255, 123, 0); font-weight: bold;">
+                                    <%=message%>
+                                </p>
+                                <%} %>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+	
+</body>
+<script>
+    function editimageView(event) {
+        const preview = document.getElementsByClassName('imagepreview')
+        for (let i = 0; i < event.target.files.length; i++) {
+            const file = event.target.files[i]
+            const reader = new FileReader()
+
+            reader.onload = function (e) {
+                preview[i].src = e.target.result
+
+            }
+            reader.readAsDataURL(file)
+        }
+
+    }
+
+</script>
+
+</html>

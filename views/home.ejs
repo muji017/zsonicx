@@ -1,0 +1,267 @@
+<%- include('./layout/userheader.ejs')%>
+	<!-- end header -->
+
+	<!-- home page slider -->
+	<div class="d-flex flex-wrap" style="display: inline-flex; width: 100%; height: 100%;">
+		<div class="search-area" style="height: 20px;">
+			<div class="container" style="height: 20px;">
+				<span class="close-btn" style="padding: 50px;"><i class="fas fa-window-close"></i></span>
+				<nav class="navbar navbar-dark"
+					style=" background-color: rgba(0, 0, 0, 0.694); width: 100%; position: absolute; top: 80px; left: 0; z-index: 100;">
+					<div class="container-fluid ">
+						<form action="/home" method="get" class="d-flex input-group w-auto">
+							
+								<a style="color:#F28123;font-size: large; font-weight: bold;">Sort :&nbsp;&nbsp;</a>
+								<select class="" name="sort" id="sort" style=" opacity: 0.7; border-radius: 5px;" id="sort">
+								  <option value=1>Name A-Z</option>
+								  <option value=-1>Name Z-A</option>
+								</select>
+								&nbsp;&nbsp;&nbsp;&nbsp;
+			
+							<input type="search" id="key" name="key" class="form-control rounded" placeholder="Search"
+								aria-label="Search" style=" opacity: 0.7;  width: 85vw;" aria-describedby="search-addon" />
+
+								&nbsp;&nbsp;&nbsp;&nbsp;
+								<a style="color:#F28123;font-size: large; font-weight: bold;">Filter :&nbsp;&nbsp;</a>
+								<select class="" id="filter" name="filter" style=" opacity: 0.7;  border-radius: 5px;" id="sort">
+									<option>Choose price</option>
+								  <option value="below1000">Below and Equal 1000</option>
+								  <option value="above1000">Above 1000</option>
+								</select>
+								&nbsp;&nbsp;&nbsp;&nbsp;
+							<button type="submit"
+								style="background-color: black; width:120px ;color: aliceblue; font-size: 20; font-weight: bold;">Search</button>
+						</form>
+					</div>
+				</nav>
+			</div>
+		</div>
+
+	<div class="homepage-slider">
+		<!-- single home slider -->
+		<div class="single-homepage-slider "
+			style="background-image:url(/public/images/appimages/IMG_6926\ \(2\)\ \(1\).JPG);">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12 col-lg-7 offset-lg-1 offset-xl-0">
+						<div class="hero-text">
+							<div class="hero-text-tablecell">
+								<p class="subtitle">Get your Game on</p>
+								<h1>Heading to the top</h1>
+								<div class="hero-btns">
+									<a href="/viewproduct/?id=<%=category[0]._id%>" class="boxed-btn">More
+										categories</a>
+									<a href="contact.html" class="bordered-btn">Contact Us</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- single home slider -->
+		<div class="single-homepage-slider " style="background-image: url(/public/images/appimages/messi.webp);">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-10 offset-lg-1 text-center">
+						<div class="hero-text">
+							<div class="hero-text-tablecell">
+								<p class="subtitle">Best products</p>
+								<h1>certified by zsonicx</h1>
+								<div class="hero-btns">
+									<a href="shop.html" class="boxed-btn">Visit Shop</a>
+									<a href="contact.html" class="bordered-btn">Contact Us</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- single home slider -->
+		<div class="single-homepage-slider " style="background-image: url(/public/images/appimages/cr7.jpg);">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-10 offset-lg-1 text-right">
+						<div class="hero-text">
+							<div class="hero-text-tablecell">
+								<p class="subtitle">Mega Sale Going On!</p>
+								<h1>Get Best Discount</h1>
+								<div class="hero-btns">
+									<a href="shop.html" class="boxed-btn">Visit Shop</a>
+									<a href="contact.html" class="bordered-btn">Contact Us</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
+	<!-- end home page slider -->
+
+	<!-- features list section -->
+	<div class="list-section pt-80 pb-80">
+		<div class="container">
+
+			<div class="row">
+				<div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
+					<div class="list-box d-flex align-items-center">
+						<div class="list-icon">
+							<i class="fas fa-shipping-fast"></i>
+						</div>
+						<div class="content">
+							<h3>Shipping cost</h3>
+							<p>Only 45 rupees</p>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
+					<div class="list-box d-flex align-items-center">
+						<div class="list-icon">
+							<i class="fas fa-phone-volume"></i>
+						</div>
+						<div class="content">
+							<h3>24/7 Support</h3>
+							<p>Get support all day</p>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-4 col-md-6">
+					<div class="list-box d-flex justify-content-start align-items-center">
+						<div class="list-icon">
+							<i class="fas fa-sync"></i>
+						</div>
+						<div class="content">
+							<h3>Refund</h3>
+							<p>Get refund within 3 days!</p>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	<!-- end features list section -->
+
+<!-- search area -->
+	<% if (typeof issearch !=='undefined' ) { %>
+		<div class="product-section mt-150 mb-150">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-8 offset-lg-2 text-center">
+						<div class="section-title">
+							<h3><span class="orange-text">Search</span> results</h3>
+							<p>Enjoy shopping with us, save your money, buy the best quality products</p>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<% if (product.length> 0) {
+						for (let i = 0; i < product.length; i++) { %>
+							<div class="col-lg-4 col-md-6 text-center">
+								<div class="single-product-item">
+									<div class="product-image">
+										<a href="/viewproductdetails/?id=<%= product[i]._id %>">
+											<img src="/images/product/<%= product[i].image[0] %>" width="80%"
+												height="270px" alt="">
+										</a>
+									</div>
+									<h3><%- product[i].name %></h3>
+									<h6 style="font-weight: lighter !important;">Brand : <%-product[i].brand%></h6>
+									<p class="product-price">₹ <%- product[i].price %> <%if(product[i].offer!==0){%> <a style="color: green !important; font-size: large;">off <%= product[i].offer%> %</a><%}%></p>
+									<a href="/viewproductdetails/?id=<%= product[i]._id %>" style="width: 120px"
+										class="cart-btn">Click here</a>
+								</div>
+							</div>
+							<% } %>
+								<div class="col-12 d-flex justify-content-center">
+									<div class="pagination">
+										<% for (let j=1; j <=totalpages; j++) { %>
+											<div style="padding-left: 10px; display: inline;">
+												<a href="?page=<%= j %>&key=<%= key %>" class="btn btn-secondary <% if (j === parseInt(currentpage)) { %>active<% } %>"
+													style="border: none; border-radius: 5px;background-color:<%=j===parseInt(currentpage)?'orange':''%>;
+															color:<%=j===parseInt(currentpage)?'white':''%>"><%=j%></a>
+				                                        
+											<% } %>
+											</div>
+									</div>
+								</div>
+								<% } else { %>
+									<div class="col-12 d-flex justify-content-center">
+										<h3 style="color: red !important;">
+											<%= noitem %>
+										</h3>
+									</div>
+									<% } %>
+				</div>
+			</div>
+		</div>
+		<% } %>
+			<!-- end product section -->
+
+
+			<!-- product section -->
+			<div class="product-section mt-150 mb-150">
+				<div class="container">
+					<div class="row">
+						<div class="col-lg-8 offset-lg-2 text-center">
+							<div class="section-title">
+								<h3><span class="orange-text">Popular</span> categories </h3>
+								<p>Enjoy shopiping with us , save your money , buy best quality products </p>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<% if(category.length>0){
+							for(let i=0;i<category.length;i++){%>
+								<div class="col-lg-4 col-md-6 text-center">
+									<div class="single-product-item">
+										<div class="product-image">
+											<a href="/viewproduct/?id=<%=category[i]._id%>"><img
+													src="/images/product/<%= category[i].image %>" width="80%"
+													height="270px" alt=""></a>
+										</div>
+										<h3><%- category[i].name%> <%if(category[i].offer!==0){%> <a style="color: green !important; font-size: medium;">off <%=category[i].offer%> % for all</a><%}%></h3>
+										<a href="/viewproduct/?id=<%=category[i]._id%>" style="width:120px"
+											class="cart-btn">Click here </a>
+									</div>
+								</div>
+								<%}}%>
+					</div>
+				</div>
+			</div>
+			<!-- end product section -->
+
+			<!-- logo carousel -->
+			<div class="logo-carousel-section">
+				<div class="container">
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="logo-carousel-inner">
+								<div class="single-logo-item">
+									<img src="public/img/company-logos/1.png" alt="">
+								</div>
+								<div class="single-logo-item">
+									<img src="public/img/company-logos/2.png" alt="">
+								</div>
+								<div class="single-logo-item">
+									<img src="public/img/company-logos/3.png" alt="">
+								</div>
+								<div class="single-logo-item">
+									<img src="public/img/company-logos/4.png" alt="">
+								</div>
+								<div class="single-logo-item">
+									<img src="public/img/company-logos/5.png" alt="">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- end logo carousel -->
+			<%- include('./layout/userfooter.ejs')%>
+
+				<!-- end copyright -->

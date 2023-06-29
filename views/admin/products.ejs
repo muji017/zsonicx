@@ -1,0 +1,121 @@
+<%- include('../layout/adminheader.ejs')%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+    <!-- <link rel="stylesheet" href="../public/stylesheet/home.css"> -->
+    <style>
+      .nav-link.products{
+            color: rgb(242, 129, 35);
+     }
+     body{
+        background-color: rgba(255, 255, 255, 0.9);
+        color: black !important;
+     }
+     </style>
+</head>
+<body>
+
+            <!-- breadcrumb-section -->
+            <div class="breadcrumb-section " style="background-image: url(/public/images/appimages/IMG_6926\ \(2\)\ \(1\).JPG)">
+            </div>
+            <!-- end breadcrumb section -->
+
+    <div class="container mt-80" style="position: relative;">
+        <div class="" style="position: absolute;right: 0;">
+            <button class="btn btn-secondary" onclick="history.back()">Go Back</button>
+            </div>
+        </div>
+<div class="container m-4">
+   <a href="/admin/addproducts" class="btn" style="color: #fff;font-weight: bold; background-color:rgb(242, 129, 35);" >ADD PRODUCT</a>
+   </div>
+    <section>
+
+        <div class="container mt-5 mb-80">
+            <div class="container-fluid">
+            <table id="table1" class="table mt-4" style="color: #000;">
+                <thead>
+                    <tr style="color: #000;">
+                        <th scope="col">No</th>
+                        <th scope="col">Image</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Brand</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Offer</th>
+                        <th scope="col">Stock</th>
+                        <th scope="col">Category</th>
+                        <th scope="col">Options</th>
+                    </tr>
+                </thead>
+                <tbody>
+                
+                    <% if(product.length>0) {
+                        for(let i=0; i<product.length; i++) { %>
+                            <tr>
+                                <th><%- i+1%></th>
+                                <td><img src="/images/product/<%= product[i].image[0] %>" width="40px" height="40px"
+                                    alt="<%= product[i].image[0] %>"></td>
+                                <td>
+                                    <%= product[i].name %>
+                                </td>
+                                <td>
+                                    <%= product[i].brand %>
+                                </td>
+                                <td>
+                                    ₹ <%= product[i].price %>
+                                </td>
+                                <td>
+                                    <%= product[i].offer %> %
+                                </td>
+                                <td>
+                                    <%= product[i].stock %>
+                                </td>
+                                <td>
+                                    <%= product[i].category[0].name%>
+                                </td>
+                                <td>
+                                    <% if(product[i].is_delete==0){%>
+                                    <a href="/admin/deleteproduct?id=<%= product[i]._id %>"><button
+                                    class="btn btn-danger ublock"
+                                    onclick="return confirm('Do you want to delete the product <%= product[i].name %>?')" style="width: 75px;">Delete</button></a>
+
+                                    <a href="/admin/editproduct/?id=<%= product[i]._id %>"class="btn btn-primary" style="width: 75px;">Edit</a>
+                                    <%}else{%>
+                                        <a href="/admin/makeavailable?id=<%= product[i]._id %>"><button
+                                            class="btn btn-warning ublock"
+                                            onclick="return confirm('Do you want to delete the product <%= product[i].name %>?')">Make available</button></a>
+                                     <%}%>
+                               </td>
+
+                               </tr>
+                         
+                             <% } } 
+                             else { %>
+                                <tr>
+                                    <td colspan="5">Page is empty</td>
+                                </tr>
+                                <% } %> 
+    
+                            </tbody>
+</table></div>
+                        </div>
+                        
+    </section>
+    <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.2/js/dataTables.bootstrap4.min.js"></script>
+    <script src="//cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#table1').DataTable();
+        });
+    </script>
+
+</body>
+</html>
+<%- include('../layout/adminfooter.ejs')%>
+

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<%- include('../layout/adminheader.ejs') %>
+	<html>
+
+	<head>
+		<title></title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.15/dist/sweetalert2.min.css">
+		<link rel="stylesheet" type="text/css"
+			href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+		<script
+			type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+		<!-- Custom Theme files -->
+		<link href="css/style.css" rel="stylesheet" type="text/css" media="all">
+		<!-- //Custom Theme files -->
+		<!-- web font -->
+		<link href="//fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i" rel="stylesheet">
+		<!-- //web font -->
+		<link href="/public/stylesheet/home.css" rel="stylesheet">
+		<style>
+			#imagecontainer {
+				display: flex;
+				flex-wrap: wrap;
+				justify-content: flex-start;
+			}
+
+			.card {
+
+				margin: 10px;
+
+				background-color: #fdfdfd;
+				border-radius: 5px;
+				box-shadow: 0 2px 4px rgba(0, 0, 0, 0.424);
+			}
+
+			.card-title {
+				text-align: right;
+			}
+
+			.card-body {
+				text-align: center;
+			}
+
+			.imagepreview {
+				width: 100px;
+				height: 100px;
+				object-fit: cover;
+			}
+
+
+
+
+			lebel {
+				color: rgba(0, 0, 0, 0.591);
+			}
+
+			.image {
+				width: 100px;
+				height: 100px;
+				object-fit: cover;
+				margin-right: 10px;
+			}
+		</style>
+	</head>
+
+	<body style="background-color: #fff !important;">
+		<!-- breadcrumb-section -->
+		<div class="breadcrumb-section "
+			style="background-image: url(/public/images/appimages/IMG_6926\ \(2\)\ \(1\).JPG)">
+		</div>
+		<!-- end breadcrumb section -->
+		<div class="container mt-5" style="position: relative;">
+			<div class="" style="position: absolute;right: 0;">
+				<button class="btn btn-secondary" onclick="history.back()">Go Back</button>
+			</div>
+		</div>
+		<div class="d-flex justify-content-center mt-100 mb-80" style="background-color: #fff;">
+			<!-- main -->
+
+
+			<div class="d-flex justify-content-center container row p-5"
+				style=" background-color: rgb(255, 255, 255); color: #000000; padding-top: 40px; border: solid 1px;border-color: #ffffff;box-shadow: 0px 0px 10px 0px #0d0d0d; border-radius: 10px;">
+				<div class="col-md-6  container-fluid">
+					<div style="font-size: larger; font-weight: bold; color: #000000 !important; padding-top: 20px;"
+						class="productdiv container-fluid">
+						<h4>EDIT PRODUCT</h4><br>
+						<form action="/admin/updateproducts" enctype="multipart/form-data" method="post">
+							<div class="namediv">
+								<p style="color: red;">
+									<%=error%>
+								</p>
+								<lebel>
+									Product Name
+								</lebel><br>
+								<input type="text" name="name" value="<%=product.name%>">
+							</div>
+							<div class="namediv">
+								<lebel>
+									Brand Name
+								</lebel><br>
+								<input type="text" name="brand" value="<%=product.brand%>">
+							</div>
+							<div class="namediv">
+								<lebel>
+									Description
+								</lebel><br>
+								<input type="text" name="description" value="<%=product.description%>">
+							</div>
+							<div class="namediv">
+								<lebel>
+									Category
+								</lebel><br>
+								<input type="text" name="categoryname" id="catname" value="<%=category.name%>">
+								<input type="text" name="category" hidden id="categoryid" value="<%=category._id%>">
+								<select id="category"
+									style="width: 100%; height: 30px;margin-bottom: 10px; background-color: #ffffff; border-radius: 4px !important; ">
+									<option>Select category</option>
+									<% for(i=0;i<allCategories.length;i++){%>
+										<option value="<%=i%>">
+											<%=allCategories[i].name%>
+										</option>
+										<%}%>
+								</select>
+
+							</div>
+							<div class="namediv">
+								<lebel>
+									Stock
+								</lebel><br>
+								<input type="text" name="quantity" value="<%=product.stock%>">
+							</div>
+							<div class="namediv">
+								<lebel>
+									offer
+								</lebel><br>
+								<input type="text" name="offer" value="<%=product.offer%>">
+							</div>
+							<div class="namediv" style="margin-bottom: 10px;">
+								<lebel>
+									Price (₹)
+								</lebel><br>
+								<input type="text" name="price" value="<%=product.price%>">
+							</div>
+							<div>
+								<input type="text" class="form-control" id="" name="id" required hidden
+									value="<%= product._id %>">
+							</div>
+					</div>
+				</div>
+				<div class="col-md-6 container-fluid p-5">
+					<div>
+						<div id="imagecontainer">
+							<% for(let i=0; i<product.image.length; i++) { %>
+								<div class="card">
+									<div class="card-title">
+										<a href="/admin/deleteimage?index=<%=i%>&id=<%=product._id%>">
+											<i class="fas fa-window-close"></i>
+										</a>
+									</div>
+									<div class="card-body">
+										<img class="imagepreview" id="imageInput"
+											src="/public/images/product/<%= product.image[i] %>" alt="image">
+									</div>
+								</div>
+								<% } %>
+						</div>
+						<div id="previewArea"></div>
+					</div>
+					<label style="color: #fff;font-weight: 500; padding-top: 20px;">Upload images</label><br>
+					<input class="btn btn-secondary" type="file" multiple name="image" onchange="preview(event)">
+					<div class="mt-4">
+						<input type="submit" onclick="sweet()" class="btn btn-primary">
+					</div>
+				</div>
+				</form>
+			</div>
+		</div>
+		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.15/dist/sweetalert2.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+		<script>
+			function preview(event) {
+				const previewArea = document.getElementById('previewArea');
+				previewArea.innerHTML = '';
+
+				const files = event.target.files;
+				for (let i = 0; i < files.length; i++) {
+					const file = files[i];
+					const reader = new FileReader();
+
+					reader.onload = function (event) {
+						document.getElementById('imagecontainer').style.display = "none";
+						const imageElement = document.createElement('img');
+						imageElement.src = event.target.result;
+						imageElement.classList.add('image');
+						previewArea.appendChild(imageElement);
+
+					};
+					reader.readAsDataURL(file);
+				}
+			}
+
+
+			window.onload = function () {
+				const imageInput = document.getElementById('imageInput');
+				const previewArea = document.getElementById('previewArea');
+				if (imageInput.files && imageInput.files.length > 0) {
+					for (let i = 0; i < imageInput.files.length; i++) {
+						const file = imageInput.files[i];
+						const reader = new FileReader();
+
+						reader.onload = function (event) {
+							const imageElement = document.createElement('img');
+							imageElement.src = event.target.result;
+							imageElement.classList.add('image');
+							previewArea.appendChild(imageElement);
+						};
+						reader.readAsDataURL(file);
+					}
+				}
+			};
+			function sweet() {
+				Swal.fire({
+					title: 'Product Updated!',
+					text: 'Please check productlist!',
+					icon: 'success',
+					customClass: {
+						icon: 'custom-icon-class',
+						popup: 'custom-popup-class',
+						content: 'custom-content-class'
+					},
+					showConfirmButton: false
+				});
+			}
+
+			const decoded = decodeURIComponent('<%-encodedcat%>');
+			const category = JSON.parse(decoded)
+
+			let selected = document.getElementById('category')
+			selected.addEventListener('change', () => {
+				const selectedIndex = selected.value
+				document.getElementById('categoryid').value = category[selectedIndex]._id
+				document.getElementById('catname').value = category[selectedIndex].name
+
+
+			})
+		</script>
+
+		<style>
+			.custom-popup-class {
+				background-color: rgb(0, 0, 0) !important;
+
+
+			}
+
+			.custom-content-class {
+				color: #F28123 !important;
+			}
+		</style>
+
+
+	</body>
+
+	</html>
+	<%- include('../layout/adminfooter.ejs') %>

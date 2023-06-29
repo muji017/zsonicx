@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<%- include('../layout/adminheader.ejs') %>
+<html>
+<head>
+<title></title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.15/dist/sweetalert2.min.css">
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+<!-- Custom Theme files -->
+<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
+<!-- //Custom Theme files -->
+<!-- web font -->
+<link href="//fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i" rel="stylesheet">
+<!-- //web font -->
+<link href="/public/stylesheet/home.css" rel="stylesheet">
+<style>
+    lebel{
+        color: rgba(202, 201, 201, 0.591);
+    }
+</style>
+</head>
+<body>
+
+            <!-- breadcrumb-section -->
+            <div class="breadcrumb-section " style="background-image: url(/public/images/appimages/IMG_6926\ \(2\)\ \(1\).JPG)">
+            </div>
+            <!-- end breadcrumb section -->
+
+	<!-- main -->
+    <div class="container mt-3" style="position: relative;">
+        <div class="" style="position: absolute;right: 0;">
+            <button class="btn btn-secondary" onclick="history.back()">Go Back</button>
+            </div>
+        </div>
+    <div class="container">
+	<div style="color: #282828; padding-top: 20px;" class="productdiv container-fluid">
+		<h4>EDIT CATEGORY</h4><br>
+		<form  action="/admin/updatecategory" enctype="multipart/form-data" method="post">
+		<div class="namediv">
+			<lebel style="color: #282828;">
+        Category Name
+			</lebel><br>
+			<input type="text" name="name" value="<%=category.name%>">
+		</div>
+    <div class="namediv"><br>
+			<lebel style="color: #282828;">
+				Category Offer(%)
+			</lebel><br>
+			<input type="text" name="offer" value="<%=category.offer%>">
+		</div>
+        <div>
+        <input type="text" class="form-control" id="" name="id" required hidden
+        value="<%= category._id %>">
+       </div>
+    </div>
+    
+        <div>
+                <img class="imagepreview" width="80px"height="80px" src="/public/images/product/<%=category.image %>" alt="image">
+        </div>
+		<label style="color: #fff;font-weight: 500 ; padding-top: 20px;">Upload image</label><br>
+		<input class="btn btn-secondary" type="file" multiple name="image" onchange="editimageView(event)">
+		<div class="mt-4">
+		<input type="submit" onclick="sweet()" class="btn btn-primary">
+		</div>
+    </div>
+		</form>
+	</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.15/dist/sweetalert2.min.js"></script>
+<script>
+    function sweet() {
+        console.log("inside sweet");
+      Swal.fire({
+        title: 'Category Updated!',
+        text: 'Please check categorylist!',
+        icon: 'success',
+        customClass: {
+          icon: 'custom-icon-class',
+          popup: 'custom-popup-class',
+          content: 'custom-content-class'
+        },
+        showConfirmButton: false
+      });
+    }
+
+    function editimageView(event) {
+        const preview = document.getElementsByClassName('imagepreview')
+        for (let i = 0; i < event.target.files.length; i++) {
+            const file = event.target.files[i]
+            const reader = new FileReader()
+
+            reader.onload = function (e) {
+                preview[i].src = e.target.result
+
+            }
+            reader.readAsDataURL(file)
+        }
+
+    }
+
+</script>
+<style>
+  .custom-popup-class {
+    background-color: rgb(0, 0, 0) !important;
+ 
+
+  }
+.custom-content-class{
+color: #F28123 !important;
+}
+
+</style>
+</body>
+</html>
+<%- include('../layout/adminfooter.ejs') %>

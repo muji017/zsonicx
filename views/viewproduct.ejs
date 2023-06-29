@@ -1,0 +1,254 @@
+<%- include('./layout/userheader.ejs')%>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.15/dist/sweetalert2.min.css">
+	<style>
+		.custom-select {
+			border-radius: 5px;
+			background-color: #F2F2F2;
+			color: #333;
+			padding: 8px;
+			border: 1px solid #CCC;
+			width: 200px;
+			font-family: Arial, sans-serif;
+			font-size: 14px;
+		}
+	</style>
+	<!-- end header -->
+	<div class="search-area" style="height: 20px;">
+		<div class="container" style="height: 20px;">
+			<span class="close-btn" style="padding: 50px;"><i class="fas fa-window-close"></i></span>
+			<nav class="navbar navbar-dark"
+				style=" background-color: rgba(0, 0, 0, 0.308); width: 100%; position: absolute; top: 80px; left: 0; z-index: 100;">
+				<div class="container-fluid ">
+					<form action="/viewproduct" id="sort-form" method="get" class="sort-form d-flex input-group w-auto">
+
+						<input type="text" hidden value="" id="id" name="id">
+						<input type="search" id="key" name="key" class="form-control rounded" placeholder="Search"
+							aria-label="Search" style="opacity:0.7; width: 85vw;" aria-describedby="search-addon" />
+						&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="text" hidden class="sort1" name="sort1" id="sort1">
+						<a style="color:#F28123;font-size: large; font-weight: bold;">Filter :&nbsp;&nbsp;</a>
+						<select class="" id="filter" name="filter" style="opacity: 0.7;  border-radius: 5px;" id="sort">
+							<option>Choose price</option>
+							<option value="below1000">Below and Equal 1000</option>
+							<option value="above1000">Above 1000</option>
+						</select>
+						&nbsp;&nbsp;&nbsp;&nbsp;
+
+						<button type="submit" onclick="setCategory()"
+							style="background-color: black; width:120px ;color: aliceblue; font-size: 20; font-weight: bold;">Search</button>
+					</form>
+				</div>
+			</nav>
+		</div>
+	</div>
+	<!-- end search area -->
+
+	<!-- breadcrumb-section -->
+	<div class="breadcrumb-section " style="background-image: url(/public/images/product/<%=category.image%>)">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-8 offset-lg-2 text-center">
+					<div class="breadcrumb-text">
+						<p>We ensure quality</p>
+						<h1><%-category.name%></h1>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end breadcrumb section -->
+	<!-- products -->
+	<div class="container pt-3" style="background-color: #F28123; height: 60px;">
+		<a style="color:#ffffff;font-size: large;   font-family: Arial, sans-serif;font-weight: bold;">Sort
+			:&nbsp;&nbsp;</a>
+		<select class="custom-select" name="sort" onclick="setCategory()" id="sort">
+			<% if (sort==-1) { %>
+				<option value="1">Price Low-High</option>
+				<option value="-1" selected>Price High-Low</option>
+				<% } else { %>
+					<option value="1" selected>Price Low-High</option>
+					<option value="-1">Price High-Low</option>
+					<% } %>
+		</select>
+
+	
+	</div>
+
+
+
+	<div class="product-section mt-80 mb-150">
+		<div class="container">
+
+			<div class="row">
+				<div class="col-md-12">
+					<div class="product-filters">
+						<ul>
+							<% if(allCategory.length>= 0){
+								for(let i = 0; i < allCategory.length; i++){%>
+									<a href="/viewproduct/?id=<%=allCategory[i]._id%>">
+										<li <%if(category.name===allCategory[i].name){%>class="active"<%}%>
+												><%-allCategory[i].name%></li>
+									</a>
+									<% } }%>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="row product-lists">
+				<% if(product.length>=0) {
+					for(let i=0;i<product.length;i++){ %>
+						<div class="col-lg-4 col-md-6 text-center ">
+							<div class="single-product-item">
+								<div class="product-image">
+									<a href="/viewproductdetails?id=<%=product[i]._id%>&c_id=<%- category._id%>"><img
+											src="/images/product/<%= product[i].image[0] %>" width="50vw" height="270vw"
+											alt=""></a>
+								</div>
+								<h3><%-product[i].brand%> <%-product[i].name%></h3>
+								<p class="product-price">₹ <%- product[i].price%>
+										<% if(product[i].offer!==0){%> <a
+												style="color: green !important;font-size: large;">off
+												<%=product[i].offer%> %</a>
+											<%}%>
+								</p>
+								<% if(product[i].stock>0){%>
+								<a onclick="addtocart('<%- category._id %>&','<%- product[i]._id %>')"
+									class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+									<%}else{%>
+									<a class="cart-btn"><i class="fas fa-window-close"></i> Out of stock</a>
+							        <%}%>
+									</div>
+						</div>
+						<%}}%>
+			</div>
+
+			<div class="row">
+				<div class="col-lg-12 text-center">
+					<div class="pagination-wrap">
+
+
+						<% for (let j=1; j <=totalpages; j++) { %>
+
+							<a href="?id=<%= category._id %>&page=<%= j %>&key=<%= key %>"
+								class="btn btn-secondary <% if (j === parseInt(currentpage)) { %>active<% } %>" style="background-color: <%= j === parseInt(currentpage) ? 'orange' : '' %>;
+									   color: <%= j === parseInt(currentpage) ? 'white' : '' %>">
+								<%= j %>
+							</a>
+
+
+
+							<% } %>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end products -->
+
+	<!-- logo carousel -->
+	<div class="logo-carousel-section">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="logo-carousel-inner">
+						<div class="single-logo-item">
+							<img src="/public/img/company-logos/1.png" alt="">
+						</div>
+						<div class="single-logo-item">
+							<img src="/public/img/company-logos/2.png" alt="">
+						</div>
+						<div class="single-logo-item">
+							<img src="/public/img/company-logos/3.png" alt="">
+						</div>
+						<div class="single-logo-item">
+							<img src="/public/img/company-logos/4.png" alt="">
+						</div>
+						<div class="single-logo-item">
+							<img src="/public/img/company-logos/5.png" alt="">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end logo carousel -->
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.15/dist/sweetalert2.min.js"></script>
+	<script>
+
+		function setCategory() {
+			let cat_id = '<%=category._id%>'
+			document.getElementById('id').value = cat_id
+		}
+
+
+		function sweet() {
+			Swal.fire({
+				title: 'Added to cart!',
+				text: 'Please check your cart!',
+				icon: 'success',
+				customClass: {
+					icon: 'custom-icon-class',
+					popup: 'custom-popup-class',
+					content: 'custom-content-class'
+				},
+				showConfirmButton: false,
+				timer: 1000
+			});
+		}
+		function addtocart(id, p_id) {
+			console.log("categoryid", id, "product_id", p_id);
+
+			// AJAX request
+			fetch(`/addtocart?id=${id}&p_id=${p_id}`, {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
+				.then(response => response.json())
+				.then(data => {
+					// Handle the response data here
+
+					sweet();
+					// Perform any necessary operations with the received data
+
+				})
+
+				.catch(error => {
+					// Handle any errors that occur during the request
+					console.error(error);
+				});
+		}
+	</script>
+	<script>
+		const sort = document.getElementById('sort');
+		const catid = document.getElementById('id').value;
+		console.log(catid);
+
+		sort.addEventListener('change', () => {
+			const sortvalue = sort.value;
+			console.log(sortvalue);
+			document.getElementById('sort1').value = sortvalue;
+
+			// Get the form element
+			const form = document.getElementById('sort-form');
+			form.submit()
+		})
+
+	</script>
+	<style>
+		.custom-popup-class {
+			background-color: rgb(0, 0, 0) !important;
+
+
+		}
+
+		.custom-content-class {
+			color: #F28123 !important;
+		}
+	</style>
+
+
+	<%- include('./layout/userfooter.ejs')%>

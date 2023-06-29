@@ -1,0 +1,99 @@
+<%- include('../layout/adminheader.ejs')%>
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!-- <link rel="stylesheet" href="../public/stylesheet/home.css"> -->
+    <style>
+       .nav-link.category{
+            color: rgb(242, 129, 35);
+     }
+     .dataTables_filter{
+        text-align: right;
+     }
+
+         </style>
+</head>
+<body>
+
+        <!-- breadcrumb-section -->
+        <div class="breadcrumb-section " style="background-image: url(/public/images/appimages/IMG_6926\ \(2\)\ \(1\).JPG)">
+        </div>
+        <!-- end breadcrumb section -->
+<div class="container">
+    <div class="container mt-3" style="position: relative;">
+        <div class="" style="position: absolute;right: 0;">
+            <button class="btn btn-secondary" onclick="history.back()">Go Back</button>
+            </div>
+        </div>
+
+<div class="container mt-4">
+    <a href="/admin/addcategory" class="btn" style="color: #fff;font-weight: bold; background-color:rgb(242, 129, 35);">ADD CATEGORY</a>
+    </div>
+    <div class="m-4" >
+      
+
+        <div class="container">
+            <div class="container-fluid">
+            <table class="table mt-4" id="table1" style="color: rgb(0, 0, 0); text-align: center; border-color:#ffffff60;">
+                <thead>
+                    <tr style="color: rgb(0, 0, 0);">
+                        <th >No</th>
+                        <th >Image</th>
+                        <th >Name</th>
+                        <th>Offer(%)</th>
+                        <th >Options</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (product.length> 0) {
+                        for(let i=0; i<product.length; i++) { %>
+                            <tr style="text-align: left;">
+                                <td ><%- i+1%></td>
+                                <td><img src="/images/product/<%= product[i].image %>" width="60px" height="60px"
+                                    alt="<%= product[i].image %>"></td>
+                                <td>
+                                    <%= product[i].name %>
+                                </td>
+                                <td>
+                                    <%= product[i].offer %> %
+                                </td>
+                               
+                                <td><a href="/admin/deletecategory?id=<%= product[i]._id %>"><button
+                                    class="btn btn-danger ublock"
+                                    onclick="return confirm('Do you want to delete the category <%= product[i].name %>?')">Delete</button></a>
+
+                                    <a href="/admin/editcategory/?id=<%= product[i]._id %>"class="btn btn-primary" style="width: 75px;">Edit</a>
+                                
+                               </td>
+
+                               </tr>
+                         
+                             <% } } else { %>
+                                <tr>
+                                    <td colspan="5">Categories Not Found</td>
+                                </tr>
+                                <% } %> 
+    
+                            </tbody>
+</table>
+                        </div>
+                        </div>
+                    </div>
+</div>
+    <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
+    <script>
+
+        $(function () {
+          $('#table1').DataTable();
+        });
+      
+      </script>
+</body>
+</html>
+<%- include('../layout/adminfooter.ejs') %>

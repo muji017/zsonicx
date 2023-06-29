@@ -1,0 +1,93 @@
+<%- include('./layout/layout.ejs')%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">          
+  <link href="../public/stylesheet/login.css" rel="stylesheet">
+</head>
+<body>
+        	<!-- breadcrumb-section -->
+<div class="breadcrumb-section " style="background-image: url(/public/images/appimages/IMG_6926\ \(2\)\ \(1\).JPG)">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 offset-lg-2 text-center">
+        <div class="breadcrumb-text">
+          <p>Otp verification</p>
+          <h1>Enter OTP</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end breadcrumb section -->
+
+  <div class="row  d-flex justify-content-center " style=" margin: 30px;">
+    <div class="login-box  col-lg-4 " style="margin-top: 15vh; margin-bottom: 15vh;" >
+    <h4 style="color: aliceblue;">check your mail for otp </h4>
+    <% if(typeof message!=='undefined')
+    {%>
+      <p style="color: red;"><%- message %></p>
+    <%
+    }
+    %>
+    <form action="/otpconform" method="post">
+      <div class="user-box">
+        <input type="text" name="otp" required="">
+        <label>Enter OTP</label>
+      </div>
+      <input type="submit" class="btn btn-primary">
+    </form>
+    <div style="text-align: center;">
+    <form action="/otplogin" method="post" >
+      <p style="color: aliceblue !important;">Remaining Time: <span id="timer" style="color: #fff !important;"><%= remainingTime %></span> seconds</p>
+      <input type="text" value="<%=email%>" hidden name="email" id="email">
+    <input onsubmit=" updateTimer();" style="  border-radius: 1px !important; background-color: #1d3cc7 !important;"  type="submit" value="Resend OTP" class="btn">
+    </form>
+    </div>
+  </div>
+</div>
+<script>
+  function updateTimer() {
+    const timerElement = document.getElementById('timer');
+    let remainingTime = parseInt(timerElement.textContent);
+    remainingTime--;
+
+    if (remainingTime < 0) {
+      clearInterval(timerInterval);
+      timerElement.textContent = 'Time Expeired pleace click resend';
+      clearOTP()
+
+    } else {
+      timerElement.textContent = remainingTime;
+    }
+  }
+  
+  function clearOTP() {
+    const email = document.getElementById('email').value;
+
+    fetch('/clearotp', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email }),
+    })
+      .then(response => response.json())
+      .then(data => {
+        // Handle the response from the server as needed
+        console.log('Resend OTP response:', data);
+        // Reload the page
+        location.reload();
+      })
+      .catch(error => {
+        console.error('Error while resending OTP:', error);
+      });
+  }
+
+  const timerInterval = setInterval(updateTimer, 1000);
+</script>
+</body>
+</html>
+<%- include('./layout/footer.ejs')%>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<%- include('../layout/adminheader.ejs')%>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Order View</title>
+    <link rel="stylesheet" href="../public/stylesheet/home.css">
+    <style>
+       .nav-link.orders{
+            color: rgb(242, 129, 35);
+     }
+     </style>
+</head>
+<body>
+    <div class="container" style="margin-top: 20px;">
+        <h1 class="text-center mt-2">Admin Order View</h1>
+        <div class="mt-4">
+            <table class="table">
+                <thead>
+                    <tr style="color: aliceblue;">
+                        <th>Order ID</th>
+                        <th>Customer Name</th>
+                        <th>Product Name</th>
+                        <th>Quantity</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% orderdata.forEach(order => { %>
+                        <% orderdata.items.forEach(item => { %>
+                            <tr>
+                                <td><%= orderdata._id %></td>
+                                <td><%= orderdata.customerName %></td>
+                                <td><%= item.product.name %></td>
+                                <td><%= item.quantity %></td>
+                                <td>
+                                    <select class="status-select" data-order-id="<%= order._id %>" data-product-id="<%= item.product._id %>">
+                                        <option value="pending" <% if (item.status === 'pending') { %>selected<% } %>>Pending</option>
+                                        <option value="shipped" <% if (item.status === 'shipped') { %>selected<% } %>>Shipped</option>
+                                        <option value="delivered" <% if (item.status === 'delivered') { %>selected<% } %>>Delivered</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <button class="update-status-btn" data-order-id="<%= order._id %>" data-product-id="<%= item.product._id %>">Update Status</button>
+                                    <a href="/cancelorder?orderId=<%= order._id %>&productId=<%= item.product._id %>">
+                                        <button class="cancel-order-btn">Cancel Order</button>
+                                    </a>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Update status on select change
+            $('.status-select').on('change', function() {
+                const orderId = $(this).data('order-id');
+                const productId = $(this).data('product-id');
+                const status = $(this).val();
+
+                // Send AJAX request to update status
+                $.ajax({
+                    url: '/updatestatus',
+                    method: 'POST',
+                    data: {
+                        orderId: orderId,
+                        productId: productId,
+                        status: status
+                    },
+                    success: function(response) {
+                        console.log('Status updated successfully:', response);
+                    },
+                    error: function(error) {
+                        console.error('Error updating status:', error);
+                    }
+                });
+            });
+
+            // Handle cancel order button click
+            $('.cancel-order-btn').on('click', function(event) {
+                event.preventDefault();
+                const confirmation = confirm('Are you sure you want to cancel this order?');
+                if (confirmation) {
+                    window.location.href = $(this).attr('href');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+<%- include('../layout/adminfooter.ejs') %>

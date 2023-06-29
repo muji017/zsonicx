@@ -1,0 +1,141 @@
+<%- include('../layout/adminheader.ejs') %>
+<!DOCTYPE html>
+
+<html>
+<head>
+<title></title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+<!-- Custom Theme files -->
+<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
+<!-- //Custom Theme files -->
+<!-- web font -->
+<link href="//fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i" rel="stylesheet">
+<!-- //web font -->
+<link href="/public/stylesheet/home.css" rel="stylesheet">
+<style>
+	.namediv{
+		padding-left:20px;
+		
+	}
+	.image {
+     width: 100px;
+     height: 100px;
+     object-fit: cover;
+     margin-right: 10px;
+    }
+
+</style>
+</head>
+<body  >
+	<div style="background-color: #fff;">
+	        <!-- breadcrumb-section -->
+			<div class="breadcrumb-section " style="background-image: url(/public/images/appimages/IMG_6926\ \(2\)\ \(1\).JPG)">
+			</div>
+			<!-- end breadcrumb section -->
+	<!-- main -->
+	<div class="container mt-5" style="position: relative;">
+	<div class="" style="position: absolute;right: 0;">
+		<button class="btn btn-secondary" onclick="history.back()">Go Back</button>
+		</div>
+	</div>
+	<div class="d-flex justify-content-center container mt-100 mb-80 ">
+	<div style=" background-color: rgba(0, 0, 0, 0.047); color: #000000; padding-top: 40px; border: solid 1px;border-color: #ffffff;box-shadow: 0px 0px 10px 0px #0d0d0d64; border-radius: 10px;" class="container-fluid productdiv">
+		<h4 >ADD PRODUCT</h4><br>
+
+		<form action="/admin/addproducts" enctype="multipart/form-data" method="post">
+		<div class="namediv">
+			<p style="color: red;"><%=error%></p>
+			<lebel>
+				Product Name
+			</lebel><br>
+			<input type="text" name="name" placeholder="Enter product name">
+		</div>
+		<div class="namediv" >
+			<lebel>
+				Brand Name
+			</lebel><br>
+			<input type="text" name="brand" placeholder="Enter brand name">
+		</div>
+		<div class="namediv">
+			<lebel>
+				Category
+			</lebel><br>
+			<input type="text" hidden value="<%= category[0]._id%>" name="categoryid" id="categoryid">
+			<select id="category" style="width: 100%; height: 30px;margin-bottom: 10px;border: none; background-color: #ffffff; border-radius: 4px; " >
+			    <% for(i=0;i<category.length;i++){%>
+				<option value="<%= category[i]._id %>"><%=category[i].name%></option>
+				<%}%>
+			</select>
+			
+		</div>
+		<div class="namediv">
+			<lebel>
+				Quantity
+			</lebel><br>
+			<input type="text" name="quantity" placeholder="Enter Quantity">
+		</div>
+		<div class="namediv">
+			<lebel>
+				Desription
+			</lebel><br>
+			<input type="text" name="description" placeholder="Enter Quantity">
+		</div>
+		<div class="namediv" style="margin-bottom: 10px;">
+			<lebel>
+				Price (₹)
+			</lebel><br>
+			<input type="text" name="price" placeholder="Enter price for one">
+		</div>
+		<div class="namediv" style="margin-bottom: 10px;">
+			<lebel>
+				Offer (%)
+			</lebel><br>
+			<input type="text" name="offer" placeholder="Enter offer in percentage">
+		</div>
+		<div class="m-4">
+			<div id="previewArea"></div>
+		<label style="color: #000000;font-weight: 300 ;">Uplode images</label><br>
+		<input class="text" type="file" multiple name="image" onchange="preview(event)" required="">
+		</div>
+		<div style="text-align: center; padding-top: 20px; padding-bottom: 15px;">
+		<input type="submit" class="btn btn-primary" style="width: 100px;">
+		</div>
+
+		</form>
+	</div>
+	</div>
+	</div>
+  <script>
+	//preview image 
+	function preview(event){
+		const previewArea = document.getElementById('previewArea');
+        previewArea.innerHTML = '';
+
+		const files=event.target.files
+		for(let i=0;i<files.length;i++){
+			const file=files[i]
+			const reader= new FileReader()
+			
+		   reader.onload = function(event) {
+           const imageElement = document.createElement('img');
+           imageElement.src = event.target.result;
+           imageElement.classList.add('image');
+           previewArea.appendChild(imageElement);
+           }
+		   reader.readAsDataURL(file);
+		}
+	}
+	//category id setting
+	 const selectElement=document.getElementById('category')
+	 selectElement.addEventListener('change',()=>{
+		const selectedOption = selectElement.options[selectElement.selectedIndex];
+        const selectedCategoryId = selectedOption.value;
+		document.getElementById('categoryid').value=selectedCategoryId
+	 })
+  </script>
+</body>
+
+</html>
+<%- include('../layout/adminfooter.ejs') %>

@@ -1,0 +1,162 @@
+<%- include('../layout/adminheader.ejs')%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        .nav-link.dashboard {
+            color: rgb(242, 129, 35);
+        }
+    </style>
+</head>
+<body>
+    <!-- breadcrumb-section -->
+    <div class="breadcrumb-section" style="background-image: url(/public/images/appimages/IMG_6926\ \(2\)\ \(1\).JPG)"></div>
+    <!-- end breadcrumb section -->
+
+    <div class="row mt-2">
+        <div class="col-12 container" style="position: relative;">
+            <div class="m-5" style="position: absolute; right: 0;">
+                <button class="btn btn-secondary" onclick="history.back()">Go Back</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid d-flex justify-content-center mt-5" style="text-align: center; margin-top: 10px; margin-bottom: 20px;">
+      <div class="m-5 row container">
+        <div class="col-md-3 container-fluid">
+          <a href="/admin/orders"><div class="card" style="background-color: #ffffff; box-shadow: 2px 2px 5px 2px rgba(0, 0, 0, 0.3);">
+              
+                  <div class="card-body">
+                      <h5 class="card-title">Total Orders</h5>
+                      <p class="card-text"><%=ordercount%></p>
+                  </div>
+              </div>
+              </a>
+          </div>
+          <div class="col-md-3 container-fluid">
+            <a href="/admin/userlist"> <div class="card" style="background-color: #ffffff; box-shadow: 2px 2px 5px 2px rgba(0, 0, 0, 0.3);">
+                  <div class="card-body">
+                      <h5 class="card-title">Total Users</h5>
+                      <p class="card-text"><%=usercount%></p>
+                  </div>
+              </div>
+              </a>
+          </div>
+          <div class="col-md-3 container-fluid">
+            <a href="/admin/products"> <div class="card" style="background-color: #ffffff; box-shadow: 2px 2px 5px 2px rgba(0, 0, 0, 0.3);">
+                  <div class="card-body">
+                      <h5 class="card-title">Total Products</h5>
+                      <p class="card-text"><%=productcount%></p>
+                  </div>
+              </div>
+              </a>
+          </div>
+          <div class="col-md-3 container-fluid">
+            <a href="/admin/salesreport"> <div class="card" style="background-color: #ffffff; box-shadow: 2px 2px 5px 2px rgba(0, 0, 0, 0.3);">
+                  <div class="card-body">
+                      <h5 class="card-title">Total Sales</h5>
+                      <p class="card-text">₹ <%=totalsales%></p>
+                  </div>
+              </div>
+              </a>
+          </div>
+      </div>
+  </div>
+  
+    <div class="container mb-80 mt-5 d-flex justify-content-center" style="text-align: center;background-color: #ffffff; box-shadow: 2px 2px 5px 2px rgba(0, 0, 0, 0.3);">
+        <div class="m-5 row container d-flex justify-content-right">
+            <div class="col-md-6 container-fluid" style="text-align: left">
+                <h3>SALES REPORT</h3>
+                <div class=" d-flex justify-content-center">
+                    <canvas id="myChart"></canvas>
+                </div>
+            </div>
+
+            <div class="col-md-6 container d-flex justify-content-center" style="text-align: center;">
+                <h3>ORDERS</h3>
+                <div class="m-4">
+                    <canvas id="statusChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        // Chart.js code for sales report
+        const ctx = document.getElementById('myChart');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Jan', 'Feb', 'March', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'],
+                datasets: [{
+                    label: '# of Votes',
+                    data: [10, 14, 3, 5, 2, 3, 3, 2, 7, 4, 11, 14],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Chart.js code for order status
+        let statusCount = JSON.parse('<%- JSON.stringify(orderData) %>');
+        let returnCount = JSON.parse('<%- JSON.stringify(returnCount) %>');
+        let pieData = {
+            labels: ['Delivered', 'Pending', 'Returned', 'Order cancelled'],
+            values: []
+        };
+
+        statusCount.forEach(status => {
+            if (status.status === 'Delivered') {
+                pieData.values[0] = status.count;
+            } else if (status.status === 'Pending') {
+                pieData.values[1] = status.count;
+            }
+            if (status.status === 'Delivered' && returnCount > 0) {
+                pieData.values[2] = returnCount;
+            }
+            if (status.status === 'Order cancelled') {
+                pieData.values[3] = status.count;
+            }
+        });
+
+        const colors = ['#05f511', 'rgba(207, 12, 8)', 'rgba(13, 52, 161)', '#f55505'];
+
+        // Create the chart for order status
+        const donut = document.getElementById('statusChart').getContext('2d');
+        new Chart(donut, {
+            type: 'doughnut',
+            data: {
+                labels: pieData.labels,
+                datasets: [{
+                    label: 'Data',
+                    data: pieData.values,
+                    backgroundColor: colors,
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
+<%- include('../layout/adminfooter.ejs') %>

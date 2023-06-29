@@ -1,0 +1,42 @@
+<%- include('../layout/layout.ejs')%>
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div class="row  d-flex justify-content-center " style=" margin: 30px;">
+    <div class="login-box  col-lg-4 " style="margin-top: 15vh; margin-bottom: 15vh;" >
+  
+    <h2>Admin Login</h2>
+    <% if(typeof message!=='undefined')
+    {%>
+      <p style="color: red;"><%- message %></p>
+    <%
+    }
+    %>
+    <form action="/admin/adminlogin" method="post">
+      <div class="user-box">
+        <input type="password" name="key" required="">
+        <p style="color: red;"></p>
+        <label>Admin Key</label>
+      </div>
+      <div class="d-flex justify-content-center">
+        <a><input type="submit"  value="login" style=" width: 130px; height: 50px;">
+          
+        </a>
+      </div>
+    </form>
+    <p style="color: #fff;">Forgot password? <a href="/admin/forget"> click here!</a></p>
+  </div>
+</div>
+
+  <script>
+  </script>
+</body>
+</html>
+<%- include('../layout/footer.ejs')%>

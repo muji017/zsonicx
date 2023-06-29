@@ -1,0 +1,61 @@
+<h2 style="text-align-last: center;">Sales Report</h2>
+<% if (orders && orders.length > 0) { %>
+    <table class="table" id="productsTable">
+      <thead>
+        <tr>
+          <th scope="col">No</th>
+          <th scope="col">Date</th>
+          <th scope="col">User</th>
+          <th scope="col">Payment</th>
+          <th scope="col">Status</th>
+          <th scope="col">Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% orders.forEach(function(order, index) { %>
+          <tr>
+            <td><%= index + 1 %></td>
+            <td><%= order.orderdate %></td>
+            <td><%= order.name %></td>
+            <td><%= order.payment %></td>
+            <td><%= order.status %></td>
+            <td>₹<%= order.totalamount %></td>
+          </tr>
+        <% }); %>
+        <tr>
+            <td colspan="2">
+                Total Amount:
+            </td>
+            <td colspan="3">
+                 <%=total%>
+            </td>
+        </tr>
+      </tbody>
+    </table>
+  <% } else { %>
+    <p>No orders found.</p>
+  <% } %>
+  
+  <style>
+    .table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+  
+    .table th,
+    .table td {
+      padding: 8px;
+      border: 1px solid black;
+    }
+  
+    .table th {
+      background-color: #f2f2f2;
+      font-weight: bold;
+      text-align: center;
+    }
+  
+    .table td {
+      text-align: center;
+    }
+  </style>
+  

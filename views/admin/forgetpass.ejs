@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<%- include('../layout/layout.ejs')%>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link href="../public/stylesheet/login.css" rel="stylesheet">
+</head>
+<body>
+  	
+ 
+    <div class="row  d-flex justify-content-center " style=" margin: 30px;">
+      <div class="login-box  col-lg-4 " style="margin-top: 15vh; margin-bottom: 15vh;" >
+    <h5 style="color:#fff;">Forgot password?</h5>
+    <% if(typeof message!=='undefined')
+    {%>
+      <p style="color: red;"><%- message %></p>
+    <%
+    }
+    %>
+      <form action="/admin/forget" method="post">
+        <div class="user-box">
+          <input type="text" name="email" required="">
+          <label>Enter your mail id</label>
+        </div>
+        <input type="submit" class="btn btn-primary">
+      </form>
+  </div>
+  </div>
+</body>
+</html>
+<%- include('../layout/footer.ejs')%>

@@ -1,0 +1,239 @@
+<%- include('./layout/userheader.ejs') %>
+<style>
+ 
+    .search-bar-icon{
+        display: none !important;
+    }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-elevatezoom/3.0.8/jquery.elevatezoom.min.js"></script>
+	<!-- search area -->
+	<div class="search-area">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<span class="close-btn"><i class="fas fa-window-close"></i></span>
+					<div class="search-bar">
+						<div class="search-bar-tablecell">
+							<h3>Search For:</h3>
+							<form action="/searchproduct" method="post">
+							<input type="text" name="key" id="key" placeholder="Keywords">
+							<button type="submit">Search <i class="fas fa-search"></i></button>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end search area -->
+    <!-- breadcrumb-section -->
+    <div class="breadcrumb-section breadcrumb"
+        style="background-image: url(/public/images/product/<%=product.image[0]%>) ">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 offset-lg-2 text-center">
+                    <div class="breadcrumb-text">
+                        <p>See more Details</p>
+                        <h1>
+                            <%= product.brand%>
+                                <%=category.name%>
+                                    <%=product.name%>
+                        </h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end breadcrumb section -->
+
+    <!-- single product -->
+    <div class="single-product mt-150 mb-150">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="single-product-img">
+                        <img id="main-image" src="/public/images/product/<%=product.image[0] %>" data-zoom-image="/public/images/product/<%=product.image[0] %>" class="product-image" width="450px" height="450px" alt="">
+                        <div style="margin-top: 15px;">
+                            <% for(let i=0; i<product.image.length; i++) { %>
+                            <img class="imagepreview" style="border-radius: 10px; margin-right: 20px;" width="100px" height="100px" src="/public/images/product/<%=product.image[i] %>" alt="image" onclick="changeMainImage('<%=product.image[i] %>')">
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <div class="single-product-content">
+                        <h3>
+                            <%= product.brand%>
+                            <%=category.name%>
+                            <%=product.name%>
+                        </h3>
+                        <p class="single-product-pricing">
+                            <span>Price</span> ₹ <%= product.price%>
+                            <a style="color: green !important; font-size: large;">off <%= product.offer%> %</a>
+                        </p>
+                        <p>
+                            <%= product.description%>
+                        </p>
+                        <div class="single-product-form">
+                            <%if(product.stock>0){%>
+                            <a onclick="addtocart('<%- category._id %>','<%- product._id %>')" class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a>
+                            <%} else{%>
+                            <a  class="cart-btn"><i class="fas fa-window-close"></i> Out of Stock</a>
+                            <%}%>
+                            <p><strong>Category: </strong><%- category.name%></p>
+                        </div>
+                        <h4>Share:</h4>
+                        <ul class="product-share">
+                            <li><a href=""><i class="fab fa-facebook-f"></i></a></li>
+                            <li><a href=""><i class="fab fa-twitter"></i></a></li>
+                            <li><a href=""><i class="fab fa-google-plus-g"></i></a></li>
+                            <li><a href=""><i class="fab fa-linkedin"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function changeMainImage(imagePath) {
+            var mainImage = document.getElementById('main-image');
+            mainImage.src = "/public/images/product/" + imagePath;
+            mainImage.setAttribute('data-zoom-image', "/public/images/product/" + imagePath);
+        }
+    </script>
+    
+    <!-- end single product -->
+
+    <!-- more products -->
+    <div class="more-products mb-150">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 offset-lg-2 text-center">
+                    <div class="section-title">
+                        <h3><span class="orange-text">Related</span> Products</h3>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid, fuga quas itaque eveniet
+                            beatae optio.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <% if (allproduct.length > 0) {
+                    for (let i = 0; i < Math.min(6, allproduct.length); i++) { %>
+                      <div class="col-lg-4 col-md-6 text-center">
+                        <div class="single-product-item">
+                          <div class="product-image">
+                            <a href="/viewproductdetails?id=<%= allproduct[i]._id %>&c_id=<%- category._id %>">
+                              <img width="80%" height="270px" src="/images/product/<%= allproduct[i].image[0] %>" alt="">
+                            </a>
+                          </div>
+                          <h3><%- allproduct[i].brand %> <%- allproduct[i].name %></h3>
+                          <p class="product-price">₹ <%- allproduct[i].price %></p>
+                          <%if(allproduct[i].stock>0){%>
+                          <a onclick="addtocart('<%- category._id %>','<%- allproduct[i]._id %>')"  class="cart-btn">
+                            <i class="fas fa-shopping-cart"></i> Add to Cart
+                          </a>
+                          <%}else{%>
+                          <a class="cart-btn">
+                            <i class="fas fa-window-close"></i> Out of stock
+                          </a>
+                          <%}%>
+                        </div>
+                      </div>
+                <% }
+                   } %>
+              </div>
+              
+        </div>
+    </div>
+    <!-- end more products -->
+
+    <!-- logo carousel -->
+    <div class="logo-carousel-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="logo-carousel-inner">
+                        <div class="single-logo-item">
+                            <img src="/public/img/company-logos/1.png" alt="">
+                        </div>
+                        <div class="single-logo-item">
+                            <img src="/public/img/company-logos/2.png" alt="">
+                        </div>
+                        <div class="single-logo-item">
+                            <img src="/public/img/company-logos/3.png" alt="">
+                        </div>
+                        <div class="single-logo-item">
+                            <img src="/public/img/company-logos/4.png" alt="">
+                        </div>
+                        <div class="single-logo-item">
+                            <img src="/public/img/company-logos/5.png" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end logo carousel -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/elevatezoom/3.0.8/jquery.elevatezoom.min.js"></script>
+    <script>
+
+function sweet() {
+      Swal.fire({
+        title: 'Added to cart!',
+        text: 'Please check Cartlist!',
+        icon: 'success',
+        customClass: {
+          icon: 'custom-icon-class',
+          popup: 'custom-popup-class',
+          content: 'custom-content-class'
+        },
+        showConfirmButton: false,
+    timer: 1000
+      });
+    }
+function addtocart(id, p_id) {
+  console.log("categoryid", id, "product_id", p_id);
+  
+  // AJAX request
+  fetch(`/addtocart?id=${id}&p_id=${p_id}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+    .then(response => response.json())
+    .then(data => {
+      // Handle the response data here
+      
+      sweet();
+      // Perform any necessary operations with the received data
+      
+    })
+    
+    .catch(error => {
+      // Handle any errors that occur during the request
+      console.error(error);
+    });
+}
+
+  </script>
+
+  <style>
+    .custom-popup-class {
+      background-color: rgb(0, 0, 0) !important;
+	 
+
+    }
+	.custom-content-class{
+	color: #F28123 !important;
+	}
+  </style>
+    </body>
+
+    </html>
+    <%- include('./layout/userfooter.ejs') %>

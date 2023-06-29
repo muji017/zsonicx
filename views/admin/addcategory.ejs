@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<%- include('../layout/adminheader.ejs') %>
+<html>
+<head>
+<title></title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+<!-- Custom Theme files -->
+<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
+<!-- //Custom Theme files -->
+<!-- web font -->
+<link href="//fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i" rel="stylesheet">
+<!-- //web font -->
+<link href="/public/stylesheet/home.css" rel="stylesheet">
+</head>
+<body>
+	        <!-- breadcrumb-section -->
+			<div class="breadcrumb-section " style="background-image: url(/public/images/appimages/IMG_6926\ \(2\)\ \(1\).JPG)">
+			</div>
+			<!-- end breadcrumb section -->
+	<!-- main -->
+	
+	<div class=" container">
+	<div style="color: #fff; padding-top: 20px; position: relative;" class="productdiv container-luid">
+		<h4>ADD CATEGORY</h4><br>
+		<% if(typeof messages!=='undefined'){ %><h3><%=messages%></h3><% } %>
+		<div class="" style="position: absolute;right: 0;">
+		<button class="btn btn-secondary" onclick="history.back()">Go Back</button>
+		</div>
+		<form action="/admin/addcategory" enctype="multipart/form-data" method="post">
+		<div class="namediv"><br>
+			<lebel>
+				Category Name.
+			</lebel><br>
+			<input type="text" name="name" placeholder="Enter product name">
+		</div>
+		<div class="namediv"><br>
+			<lebel>
+				Category Offer(%)
+			</lebel><br>
+			<input type="text" name="offer" placeholder="Enter offer in percentage">
+		</div>
+		<div>
+		<label style="color: #fff;font-weight: 300 ;">Uplode images</label><br><br>
+		<input class="text" type="file" name="image"required="">
+		</div>
+		<div style="text-align: center; margin-top: 20px">
+		<input type="submit" class="btn btn-primary">
+		</div>
+
+		</form>
+	</div>
+	</div>
+</body>
+
+</html>
+<%- include('../layout/adminfooter.ejs') %>

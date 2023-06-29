@@ -1,0 +1,427 @@
+<%- include('./layout/userheader.ejs')%>
+  <!-- <link rel="stylesheet" href="../public/stylesheet/home.css"> -->
+  <style>
+    /* Custom styles for the checkout page */
+    .form-input {
+      border: 1px solid #ddd;
+      padding: 15px;
+      width: 100%;
+      border-radius: 3px;
+    }
+
+    .search-bar-icon {
+      display: none !important;
+    }
+  </style>
+  </head>
+
+  <body>
+    <!-- breadcrumb-section -->
+    <div class="breadcrumb-section " style="background-image: url(/public/images/appimages/IMG_6926\ \(2\)\ \(1\).JPG)">
+      <div class="container">
+        <div class="row ">
+          <div class="col-lg-8  offset-lg-2 text-center">
+            <div class="breadcrumb-text">
+              <p>Welcome back</p>
+              <h1><%-user.name%></h1>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end breadcrumb section -->
+
+
+    <div class="modal fade mt-80" id="walletModal" tabindex="-1" role="dialog"
+    aria-labelledby="addCouponModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: #000;">
+          <h5 class="modal-title" style="color: rgb(242, 129, 35);" id="">Your Wallet</h5>
+          <button type="button" style="color: rgb(242, 129, 35);" class="close" data-dismiss="modal"
+            aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+         <p>Balance : <%=user.wallet%> ₹</p>
+         <div class="form-check mb-5">
+          <input class="form-check-input me-2" type="checkbox"  id="checkboxwallet" />
+          <label class="form-check-label" for="form2Example3">
+            Use amount in wallet for payment 
+            <lebel id="checkboxTermsError" class="error"></lebel>
+             
+          </label>
+        </div>
+        
+        <a href="" class="btn"
+        style="color: #fff;font-weight: bold; background-color:rgb(242, 129, 35);" data-dismiss="modal"
+      onclick="dismissModal()">Done</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+    <!-- check out section -->
+
+    <div class="checkout-section mt-100 mb-100">
+
+      <form action="/processpayment" class="pay-form" enctype="multipart/form-data" method="post">
+        <input type="text" name="checkboxset" id="checkboxset">
+        <div class=" d-flex justify-content-center">
+          <div class="row container-fluid p-5 ">
+            <div class=" col-lg-8 d-flex justify-content-center">
+              <div class="order-details-wrap " style="width: 100%;">
+                <table class="order-details" style=" width: 100%;
+                background-color: #ffffff;
+                box-shadow: 2px 2px 5px 2px rgba(0, 0, 0, 0.3);">
+                  <thead>
+                    <tr>
+                      <th>Image</th>
+                      <th>Product</th>
+                      <th>Quantity</th>
+                      <th>Price</th>
+                    </tr>
+                  </thead>
+                  <tbody class="checkout-details">
+                    <% cartData.forEach(item=> { %>
+                      <tr>
+                        <td><img src="/images/product/<%= item.image[0] %>" alt="<%= item.name %>"
+                            style="width:100px; height:100px;"></td>
+                        <td>
+                          <%= item.name %>
+                        </td>
+                        <td>
+                          <%= item.quantity %>
+                        </td>
+                        <td>
+                          <%= item.price %>
+                        </td>
+                      </tr>
+                      <% }); %>
+                        <tr>
+                          <td>Shipping</td>
+                          <td colspan="3">Rs 45</td>
+                        </tr>
+                        <tr>
+                          <td>Total (₹)</td>
+                          <td colspan="3"><input type="text" readonly class="form-control" value=" <%-totalamount%>"
+                              id="totalamount" name="totalamount" placeholder="Enter your email" required></td>
+                        </tr>
+                        <tr>
+                          <td>Payable Amount (₹)</td>
+                          <td colspan="3"><input type="text" readonly class="form-control" value=" <%-totalamount%>"
+                              id="payableamount" name="payableamount" placeholder="Enter your email" required></td>
+                        </tr>
+                        <tr>
+                          <td colspan="4">
+                            <a class="boxed-btn"><button class="btn" onclick="payment()" style="color:#fff ;">Place
+                                Order</button></a>
+                          </td>
+                        </tr>
+                  </tbody>
+                </table>
+
+              </div>
+            </div>
+            <div class="col-12 col-lg-4">
+
+              
+              <div class=" text-center ">
+                <div class="cart-table-container">
+                  <div class="cart-table"
+                    style="background-color: #ffffff81; box-shadow: 2px 2px 5px 2px rgba(0, 0, 0, 0.3);">
+                    <div class="cart-table-head">
+                      <div class="table-head-row">
+                        <div class="cart-table-head " style="background-color: #ddd; font-weight: bold; color: #000; text-align: center;">Here's
+                          your wallet</div>
+                      </div>
+                    </div>
+                    <div class="cart-table-body pb-4 m-4">
+                      <div class="table-row">
+                        <div>
+                          <a href="" class="btn"
+                            style="color: #fff;font-weight: bold; background-color:rgb(242, 129, 35); ;  "
+                            data-toggle="modal" data-target="#walletModal">Use Wallet for payment</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+
+              <div class="checkout-accordion-wrap " style=" width: 100%;
+              background-color: #fff;
+              box-shadow: 2px 2px 5px 2px rgba(0, 0, 0, 0.3);">
+                <div class="accordion" id="accordionExample">
+                  <div class="card single-accordion">
+                    <div class="card-header" id="headingOne">
+                      <h5 class="mb-0">
+                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne"
+                          aria-expanded="true" aria-controls="collapseOne">
+                          Address-Details
+                        </button>
+                      </h5>
+                    </div>
+
+                    <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                      <div class="card-body">
+                        <div class="billing-address-form">
+                          <form>
+                            <label for="address">Name:</label>
+                            <p><input type="text" value="<%-user.name%>" id="name" name="name" class="form-input"
+                                placeholder="Enter your name"></p>
+                            <label for="address">Email:</label>
+                            <p><input type="email" value="<%-user.email%>" id="email" name="email" class="form-input"
+                                placeholder="Email">
+                            </p>
+                            <label for="address">Phone:</label>
+                            <p><input type="tel" value="<%-user.mobile%>" id="mobile" name="mobile" class="form-input"
+                                placeholder="Phone"></p>
+                            <div class="">
+                              <select class="custom-select" id="addressList">
+                                <option>Select Address</option>
+                                <% user.address.forEach(addr=> { %>
+
+                                  <option value="<%= addr.head %>">
+                                    <%= addr.head %>
+                                  </option>
+                                  <% }); %>
+                              </select>
+                              <label for="address">Address:</label>
+                              <p> <input list="addressList" id="head" name="head" class="form-input"
+                                  placeholder="Enter or select your address" required></p>
+                            </div>
+
+                            <div class="form-group">
+                              <label for="address">Street:</label>
+                              <p> <input list="streetList" id="street" name="street" class="form-input"
+                                  placeholder="Enter or select your address" required></p>
+                            </div>
+
+                            <div class="form-group">
+                              <label for="address">City:</label>
+                              <p> <input list="cityList" id="city" name="city" class="form-input"
+                                  placeholder="Enter or select your address" required></p>
+
+                            </div>
+                            <div class="form-group">
+                              <label for="address">State:</label>
+                              <p> <input list="stateList" id="state" name="state" class="form-input"
+                                  placeholder="Enter or select your address" required></p>
+
+                            </div>
+                            <div class="form-group">
+                              <label for="address">Zipcode:</label>
+                              <p> <input list="pincodeList" class="form-input" id="pincode" name="pincode"
+                                  placeholder="Enter or select your address" required></p>
+
+                            </div>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card single-accordion">
+                    <div class="card-header" id="headingThree">
+                      <h5 class="mb-0">
+                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                          data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                          Payment Methods
+                        </button>
+                      </h5>
+                    </div>
+                    <div id="collapseThree" class="collapse show" aria-labelledby="headingThree"
+                      data-parent="#accordionExample">
+                      <div class="card-body">
+                        <div class="card-details">
+                          <div>
+                            <div class="form-check">
+                              <input class="form-check-input" type="radio" name="paymentMethod" id="cashOnDelivery"
+                                value="cashOnDelivery" checked>
+                              <label class="form-check-label" for="cashOnDelivery">
+                                Cash on Delivery
+                              </label>
+                            </div>
+                            <div class="form-check">
+                              <input class="form-check-input" type="radio" name="paymentMethod" id="creditCard"
+                                value="creditCard">
+                              <label class="form-check-label" for="creditCard">
+                                Credit Card
+                              </label>
+                            </div>
+                            <div class="form-check">
+                              <input class="form-check-input" type="radio" name="paymentMethod" id="razorpay"
+                                value="razorpay">
+                              <label class="form-check-label" for="razorpay">
+                                Razorpay
+                              </label>
+                              <input type="text" name="test" id="test">
+                            </div>
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <!-- end check out section -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+
+    
+
+
+      const paymentMethodRadios = document.getElementsByName('paymentMethod');
+      const testInput = document.getElementById('test');
+
+      paymentMethodRadios.forEach(radio => {
+        radio.addEventListener('change', () => {
+          testInput.value = radio.value;
+        });
+        if (radio.checked) {
+          testInput.value = radio.value
+        }
+      })
+
+      function payment() {
+        event.preventDefault();
+        if (testInput.value === 'cashOnDelivery') {
+          document.querySelector('form').submit();
+        } else if (testInput.value === 'razorpay') {
+          var formData = $('form').serialize();
+
+          $.ajax({
+            url: "/createOrder",
+            type: "POST",
+            data: formData,
+            success: function (res) {
+              if (res.success) {
+                var options = {
+                  "key": "" + res.key_id + "",
+                  "amount": "" + res.amount + "",
+                  "currency": "INR",
+                  "name": "Zsonicx",
+                  "description": "Test Transaction",
+                  "image": "/images/resources/dclogo.png",
+                  "order_id": "" + res.order_id + "",
+                  "handler": function (response) {
+                    var form = $('.pay-form');
+                    var url = form.attr('action');
+                    var method = form.attr('method');
+                    $('<input>').attr({
+                      type: 'hidden',
+                      name: 'paymentMethod',
+                      value: response.razorpay_payment_id
+                    }).appendTo(form);
+                    form.attr('action', '/processpayment');
+                    form.attr('method', 'POST');
+                    form.unbind('submit').submit();
+                    form.attr('action', url);
+                    form.attr('method', method);
+                  },
+                  "prefill": {
+                    "name": "" + res.name + "",
+                    "email": "" + res.email + "",
+                    "contact": "" + res.mobile + ""
+                  },
+                  "notes": {
+                    "address": "Razorpay Corporate Office"
+                  },
+                  "theme": {
+                    "color": "#000"
+                  }
+                };
+                var rzp1 = new Razorpay(options);
+                rzp1.on('payment.failed', function (response) {
+                  alert("Payment Failed");
+                });
+                rzp1.open();
+              } else {
+                alert(res.msg);
+              }
+            }
+          });
+        }
+      }
+
+      // Prevent form submission when "Place Order" button is clicked
+      $(document).ready(function () {
+        $('form').submit(function (e) {
+          e.preventDefault();
+        });
+      });
+    </script>
+
+    <script>
+
+      const address = document.getElementById('addressList');
+      const head = document.getElementById('head');
+      const street = document.getElementById('street');
+      const city = document.getElementById('city');
+      const state = document.getElementById('state');
+      const pincode = document.getElementById('pincode');
+
+      const decoded = decodeURIComponent('<%-address%>');
+      const addressDb = JSON.parse(decoded)
+      // head.value = addressDb.head;
+      address.addEventListener('change', () => {
+        const selectedAddress = address.value;
+        const selectedAddressObj = addressDb.find(addr => addr.head === selectedAddress);
+
+        if (selectedAddressObj) {
+          head.value = selectedAddressObj.head;
+          street.value = selectedAddressObj.street;
+          city.value = selectedAddressObj.city;
+          state.value = selectedAddressObj.state;
+          pincode.value = selectedAddressObj.pincode;
+        } else {
+          head.value = "";
+          street.value = "";
+          city.value = "";
+          state.value = "";
+          pincode.value = "";
+
+        }
+
+      });
+
+
+
+
+    </script>
+    <script>
+      function dismissModal() {
+        const  check=document.getElementById('checkboxwallet');
+        const total=parseInt(document.getElementById('totalamount').value);
+        if(check.checked){
+          const wallet=parseInt('<%=user.wallet%>');
+          document.getElementById('checkboxset').value="checked"
+          if(total<=wallet){
+          document.getElementById('payableamount').value='Full amount from wallet';
+          }
+          else{
+            document.getElementById('payableamount').value=total-wallet;
+          }
+        }
+      }
+    </script>
+       
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <%- include('./layout/userfooter.ejs')%>

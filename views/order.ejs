@@ -1,0 +1,325 @@
+<%- include('./layout/userheader.ejs')%>
+
+<!-- Super Modal -->
+<div class="modal fade"  id="superModal" tabindex="-1" role="dialog" aria-labelledby="superModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" style="max-width: 60vh; height: 40vh;" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: rgb(0, 0, 0);">
+        <h5 class="modal-title" id="superModalLabel" style="color: #ffffff;">Enter Reason For Return Product</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" style="color: #ffffff; font-weight:100;">&times;</span>
+        </button>
+      </div>
+      <form action="/orderreturn" method="post">
+      <div class="modal-body">
+        <!-- Modal body content goes here -->
+             <input type="text" hidden  id="orderid" name="orderid" >
+            <textarea class="form-control" name="reason" id="reason"></textarea>
+            
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-warning"  style="background-color: #F28123; color: #ffffff;font-weight: bold;">Conform</button>
+      </div>
+    </form>
+    </div>
+  </div>
+</div>
+
+<!-- Super Modal -->
+<div class="modal fade"  id="superModalCancel" tabindex="-1" role="dialog" aria-labelledby="superModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" style="max-width: 60vh; height: 40vh;" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: rgb(0, 0, 0);">
+        <h5 class="modal-title" id="superModalLabel" style="color: #ffffff;">Enter Reason For Cancel Order</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" style="color: #ffffff; font-weight:100;">&times;</span>
+        </button>
+      </div>
+      <form action="/cancelorder" method="post">
+      <div class="modal-body">
+        <!-- Modal body content goes here -->
+             <input type="text" hidden  id="orderidc" name="orderidc" >
+            <textarea class="form-control" name="reasonc" id="reasonc"></textarea>
+            
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-warning"  style="background-color: #F28123; color: #ffffff;font-weight: bold;">Conform</button>
+      </div>
+    </form>
+    </div>
+  </div>
+</div>
+
+<div class="breadcrumb-section " style="background-image: url(/public/images/appimages/IMG_6926\ \(2\)\ \(1\).JPG)">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 offset-lg-2 text-center">
+        <div class="breadcrumb-text">
+          <p>Here is your</p>
+          <h1>Orders</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container" style=" width: 100%;  margin-top: 20px; color: rgb(0, 0, 0);">
+  <div class="mt-100 container" style="position: relative;">
+    <div class="col-lg-12 container-fluid">
+
+      <div class="card" style="background-color: #00000000; overflow-x: auto;border: none; color: rgb(0, 0, 0); border-color: #ffffff;box-shadow: 0px 0px 10px 0px; border-radius: 10px;">
+        <table class="table">
+          <thead style="position:sticky;background-color: #00000014; top:0;">
+            
+                <% if(typeof message !== 'undefined') { %>
+                  <tr>
+                    <th>
+                <p style="color: red;">
+                  <%= message %>
+                </p>
+              </th>
+            </tr>
+                <% } %>
+              
+            <tr style="background-color: #00000014; ">
+             
+              <th>Item</th>
+              <th></th>
+              <th>Image</th>
+              <th></th>
+              <th>Quantity</th>
+              <th>&nbsp;&nbsp;Status</th>
+              <th>&nbsp;&nbsp; Date</th>
+              <th>PaymentMethod</th>
+              <th>Total Amount</th>
+              <th>Address</th>
+              <th>&nbsp;Order Actions</th>
+              <th>Download Invoice</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (orderdata.length >= 0) { let k = 1; %>
+            <% for(let i = 0; i < orderdata.length; i++) { %>
+            <tr style="background-color: #00000014; ">
+              <td style="font-weight: bold;" colspan="12" class="orders">ORDER <%= i + 1 %></td>
+            </tr>
+            <% for(let j = 0; j < orderdata[i].products.length; j++) { %>
+            <tr>
+              
+              <td><%= orderdata[i].products[j].name %></td>
+              <td></td>
+              <td><img src="/images/product/<%= orderdata[i].products[j].image %>" alt="" style="width:50px; height: 50px;"></td>
+              <td></td>
+              <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= orderdata[i].products[j].quantity %></td>
+              <% if(j === 0) { %>
+              <td rowspan="<%= orderdata[i].products.length %>">&nbsp;&nbsp;<%= orderdata[i].status %></td>
+              <td rowspan="<%= orderdata[i].products.length %>"><%= orderdata[i].orderdate %></td>
+              <td rowspan="<%= orderdata[i].products.length %>"><%= orderdata[i].paymentmethod %></td>
+              <td rowspan="<%= orderdata[i].products.length %>">₹ <%= orderdata[i].totalamount %></td>
+              <td rowspan="<%= orderdata[i].products.length %>">
+                <%= orderdata[i].address.head %><br>
+                <%= orderdata[i].address.street %><br>
+                <%= orderdata[i].address.city %><br>
+                <%= orderdata[i].address.state %><br>
+                Pincode: <%= orderdata[i].address.pincode %>
+              </td>
+              
+              <td rowspan="<%= orderdata[i].products.length %>">
+                <% if(orderdata[i].status !== 'Delivered' && orderdata[i].status !== 'Order cancelled') { %>
+                  
+                  <a href="" onclick="setOrderid('<%=i%>')"  class="btn btn-primary" style="font-weight: bold; border:solid 1px #F28123;" data-toggle="modal" data-target="#superModalCancel">Cancel Order</a>
+                <% } if(orderdata[i].status === 'Delivered') {
+                  if(orderdata[i].returnstatus===true){  %>
+                    <a ><strong>Product Returned</strong><a></a>
+                    <%}else if(orderdata[i].returnstatus===false&&orderdata[i].returnDateStatus===1){%>
+                    
+                <a href="" onclick="setOrderid('<%=i%>')"  class="btn btn-primary" style="font-weight: bold; border: solid 1px #F28123;" data-toggle="modal" data-target="#superModal">Return Order</a>
+                <% }} %>
+              </td>
+              <td><a class="btn btn-primary pt-3" onclick="invoiceGenerate('<%=orderdata[i].orderid%>')" style=" height: 55px; color: #ffffff; background-color: #F28123;font-weight: bold; ">Download</a></td>
+              <% } %>
+            </tr>
+            <% } %>
+            <% } %>
+            <% } else { %>
+            <tr>
+              <td colspan="10">No orders found.</td>
+            </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12 m-4 d-flex justify-content-center">
+      <div class="pagination">
+        <% for (let j = 1; j <= totalpages; j++) { %>
+        <div style="padding-left: 10px; display: inline;">
+          <a href="?page=<%= j %>&key=<%= key %>"
+            class="btn btn-secondary <% if (j === parseInt(currentpage)) { %>active<% } %>"
+            style="border: none; border-radius: 5px; background-color:<%= j === parseInt(currentpage) ? 'orange' : '' %>;
+            color:<%= j === parseInt(currentpage) ? 'white' : '' %>"><%= j %></a>
+        </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<style>
+  .orders {
+    text-decoration: underline;
+    /* background-color: #000000; */
+  }
+
+  @media (max-width: 768px) {
+    .card {
+      overflow-x: auto;
+    }
+  }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/easyinvoice/dist/easyinvoice.min.js"></script>
+<script src="https://unpkg.com/easyinvoice/dist/easyinvoice.min.js"></script>
+<script>
+const orderList = JSON.parse('<%- JSON.stringify(orderdata) %>');
+
+  function setOrderid(index) {
+    console.log(orderList[index].orderid);
+    document.getElementById('orderid').value = orderList[index].orderid
+    document.getElementById('orderidc').value =  orderList[index].orderid
+    
+  }
+
+  
+
+  function invoiceGenerate(id) {
+    console.log(id);
+    let order = orderList.find(order => order.orderid === id);
+    let products = order.products.find(prod=> prod.orderid === id)
+   console.log(order);
+  
+
+    let invoiceProducts = [];
+    for (let i = 0; i < order.products.length; i++) {
+      invoiceProducts.push({
+        "quantity": order.products[i].quantity,
+        "description": order.products[i].brand,
+        "tax-rate": 6,
+        "price": order.products[i].price
+      });
+    
+    }
+    var data = {
+      // Customize enables you to provide your own templates
+      // Please review the documentation for instructions and examples
+      "customize": {
+        //  "template": fs.readFileSync('template.html', 'base64') // Must be base64 encoded html 
+      },
+      "images": {
+        // The logo on top of your invoice
+        "logo": "https://public.easyinvoice.cloud/img/logo_en_original.png",
+        // The invoice background
+        "background": "https://public.easyinvoice.cloud/img/watermark-draft.jpg"
+      },
+      // Your own data
+      "sender": {
+        "company": "Zsonicx",
+        "address": "HighRoad Thrissur",
+        "zip": "680501",
+        "city": "Thrissur",
+        "country": "India"
+        //"custom1": "custom value 1",
+        //"custom2": "custom value 2",
+        //"custom3": "custom value 3"
+      },
+      // Your recipient
+      "client": {
+        "company": order.address.name,
+        "email": order.address.email,
+        "phone": order.address.phone,
+        "address": order.address.head,
+        "street": order.address.Street,
+        "city": order.address.city,
+        "zip": order.address.pincode,
+        "state": order.address.state,
+        "country": order.address.state,
+        // "custom1": "custom value 1",
+        // "custom2": "custom value 2",
+        // "custom3": "custom value 3"
+      },
+      "information": {
+        // Invoice number
+        "number": order.orderid,
+        // Invoice data
+        "date": order.orderdate,
+        "due-date": ""
+      },
+      // The products you would like to see on your invoice
+      // Total values are being calculated automatically
+      "products":invoiceProducts,
+      // The message you would like to display on the bottom of your invoice
+      "bottom-notice": "Thanks for purchasing from us..",
+
+      // Settings to customize your invoice
+      "settings": {
+        "currency": "INR"
+        // See documentation 'Locales and Currency' for more info. Leave empty for no currency.
+        // "locale": "nl-NL", // Defaults to en-US, used for number formatting (See documentation 'Locales and Currency')        
+        // "margin-top": 25, // Defaults to '25'
+        // "margin-right": 25, // Defaults to '25'
+        // "margin-left": 25, // Defaults to '25'
+        // "margin-bottom": 25, // Defaults to '25'
+        // "format": "A4", // Defaults to A4, options: A3, A4, A5, Legal, Letter, Tabloid
+        // "height": "1000px", // allowed units: mm, cm, in, px
+        // "width": "500px", // allowed units: mm, cm, in, px
+        // "orientation": "landscape", // portrait or landscape, defaults to portrait
+      },
+      // Translate your invoice to your preferred language
+      "translate": {
+        // "invoice": "FACTUUR",  // Default to 'INVOICE'
+        // "number": "Nummer", // Defaults to 'Number'
+        // "date": "Datum", // Default to 'Date'
+        // "due-date": "Verloopdatum", // Defaults to 'Due Date'
+        // "subtotal": "Subtotaal", // Defaults to 'Subtotal'
+        // "products": "Producten", // Defaults to 'Products'
+        // "quantity": "Aantal", // Default to 'Quantity'
+        // "price": "Prijs", // Defaults to 'Price'
+        // "product-total": "Totaal", // Defaults to 'Total'
+        // "total": "Totaal", // Defaults to 'Total'
+        // "vat": "btw" // Defaults to 'vat'
+      },
+    };
+
+    // Create your invoice! Easy!
+
+    easyinvoice.createInvoice(data, function (result) {
+      // The response will contain a base64 encoded PDF file
+      console.log('PDF base64 string: ', result.pdf);
+      var base64Data = result.pdf;
+
+
+      //Convert the base64 data to a Blob object
+      var byteCharacters = atob(base64Data);
+      var byteNumbers = new Array(byteCharacters.length);
+      for (var i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      var byteArray = new Uint8Array(byteNumbers);
+      var blob = new Blob([byteArray], { type: 'application/pdf' });
+
+      // Create a temporary download link and trigger the download
+      var link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'invoice.pdf';
+      link.click();
+    });
+  }
+</script>
+
+<%- include('./layout/userfooter.ejs')%>

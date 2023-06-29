@@ -1,0 +1,46 @@
+<%- include('./layout/layout.ejs')%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link href="../public/stylesheet/login.css" rel="stylesheet">
+</head>
+<body>
+      	<!-- breadcrumb-section -->
+<div class="breadcrumb-section " style="background-image: url(/public/images/appimages/IMG_6926\ \(2\)\ \(1\).JPG)">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 offset-lg-2 text-center">
+        <div class="breadcrumb-text">
+          <p>Enter your Email</p>
+          <h1>OTP Login</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end breadcrumb section -->
+  <div class="row  d-flex justify-content-center " style=" margin: 30px;">
+    <div class="login-box  col-lg-4 " style="margin-top: 15vh; margin-bottom: 15vh;" >
+    <h4 style="color: aliceblue;">Pleace enter registered email</h4>
+    <% if(typeof message!=='undefined')
+    {%>
+      <p style="color: red;"><%- message %></p>
+    <%
+    }
+    %>
+      <form action="/otplogin" method="post">
+        <div class="user-box">
+          <input type="text" name="email" required="">
+          <label>Enter your mail id</label>
+        </div>
+        <input type="submit" style="color: aliceblue;" class="btn btn-primary">
+      </form>
+  </div>
+  </div>
+</body>
+</html>
+<%- include('./layout/footer.ejs')%>

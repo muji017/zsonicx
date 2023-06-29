@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script>
+      swal({
+        title: "Your order placed!",
+        text: "Please click the Show button to check your orders!",
+        icon: "success",
+        button: {
+          text: "Show Orders!",
+          className: "custom-button-class"
+        },
+        customClass: {
+          icon: 'custom-icon-class',
+          popup: 'custom-popup-class',
+          content: 'custom-content-class'
+        }
+      }).then(() => {
+        window.location.href = '/orders';
+      });
+    </script>
+    <style>
+      .swal-button.custom-button-class {
+        background-color: #F28123 !important;
+        color: #fff !important;
+      }
+      .custom-popup-class {
+      background-color: rgb(0, 0, 0) !important;
+	 
+
+    }
+	.custom-content-class{
+	color: #F28123 !important;
+	}
+
+  </style>
+</body>
+</html>

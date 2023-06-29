@@ -1,0 +1,166 @@
+<%- include('../layout/adminheader.ejs')%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout</title>
+  <link rel="stylesheet" href="../public/stylesheet/home.css">
+  <style>
+ 
+
+
+  </style>
+</head>
+<body>
+ <div style="background-color: #fff;">	        <!-- breadcrumb-section -->
+            <div class="breadcrumb-section " style="background-image: url(/public/images/appimages/IMG_6926\ \(2\)\ \(1\).JPG)">
+              <h6 style="color: #ffffff; text-align: center;">More about</h6>
+              <h2 style="color: #F28123; text-align: center;">Order</h2>
+            </div>
+          <!-- end breadcrumb section -->
+  <div class="container mt-80" >
+    <div class="row m-5">
+      <div class="col-lg-8">
+    
+        <!-- Product details here -->
+        <div class="card" style=" border: none; color: rgb(0, 0, 0); border-color: #ffffff;box-shadow: 0px 0px 5px 0px; border-radius: 10px;">
+          <div class="card-body">
+            <h5 class="card-title" style="color: rgb(0, 0, 0);">Order Details</h5>
+            <label style=" font-size: 20px; color: rgb(0, 0, 0);border-color:#ffffff22;">Current Status :<%if(order.return.status==true){%> Order Returned  <%}else{%><%-order.status%><%}%></label>
+           <% if(order.return.status==false){
+             if((order.status!=='Delivered')&&(order.status!=='Order cancelled')){%>
+            <select id="status" class="custom-select"  >
+                <option>Change status</option>
+                <option value="Pending">Pending</option>
+                <option value="Processing">Processing</option>
+                <option value="Shipping">Shipping</option>
+                <option value="Delivered">Delivered</option>
+            </select>
+            <%}}%>
+           
+            <table class="table" style="color: rgb(0, 0, 0);border-color:#ffffff22;">
+              <thead>
+                <tr>
+                  <th>Image</th>
+                  <th>Name</th>
+                  <th>Brand</th>
+                  <th>Price</th>
+                  <th>Quantity</th>
+                  <%if(order.return.status==true){%>
+                   <th>Reason</th> 
+                   <%}%>
+                </tr>
+              </thead>
+              <tbody>
+                <% for(let i=products.length-1;i>=0;i--) { %>
+                <tr>
+                  <td><img src="/images/product/<%=products[i].image%>" alt="<%=products[i].name%>" style="width:130px; height: 120px;"></td>
+                  <td><%= products[i].name %></td>
+                  <td><%= products[i].brand%></td>
+                  <td>₹ <%= products[i].price %></td>
+                  <td><%= products[i].quantity %></td>
+                  <%if(order.return.status==true){%>
+                    <td><%=order.return.reason%></td> 
+                    <%}%>
+                </tr>
+                <% } %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+  
+      <div class="col-lg-4" style=" border: none; color: rgb(0, 0, 0); border-color: #ffffff;box-shadow: 0px 0px 5px 0px; border-radius: 10px;">
+        <form class="checkout-form" action="/processpayment" method="post">
+          <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" class="form-control" readonly value="<%-address.name%>" id="name" name="name"  required>
+          </div>
+          <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" class="form-control" readonly value="<%-address.email%>"  id="email" name="email"  required>
+          </div>
+          <div class="form-group">
+            <label for="email">Phone:</label>
+            <input type="text" class="form-control" readonly value="<%-address.phone%>"  id="phone" name="mobile"  required>
+          </div>
+          <div class="form-group">
+            <label for="address">Address:</label>
+          </div>
+
+          <div class="form-group">
+            <label for="address">Street:</label>
+            <input list="streetList" class="form-control" readonly value="<%-address.street%>" id="street" name="street"  required>
+          </div>
+
+          <div class="form-group">
+            <label for="address">City:</label>
+            <input list="cityList" class="form-control" readonly id="city" value="<%-address.city%>" name="city" placeholder="Enter or select your address" required>
+ 
+          </div>
+
+          
+          <div class="form-group">
+            <label for="address">State:</label>
+            <input list="stateList" class="form-control" readonly value="<%-address.state%>" id="state" name="state" required>
+      
+          </div>
+   
+          
+          <div class="form-group">
+            <label for="address">Zipcode:</label>
+            <input list="pincodeList" class="form-control" readonly value="<%-address.pincode%>" id="pincode" name="pincode" required>
+           
+          </div>
+
+          <div class="form-group">
+            <label for="email">Total amount:</label>
+            <input type="text" readonly class="form-control" readonly value="<%-order.totalamount%>"  id="totalamount" name="totalamount"  required>
+          </div>
+          
+        </div>
+         
+      </form>
+      <input type="text" id="orderid" hidden name="orderid" value="<%=orderid%>">
+    </div>
+    <div style="width: 100%; height: 8vh;" >
+      
+    </div>
+    </div>
+</div>   
+ 
+<script>
+  let selectedstatus = document.getElementById('status');
+  let orderID = document.getElementById('orderid').value;
+  
+  let test = document.getElementById('test');
+  let status = document.getElementById('status').value;
+  console.log('Event listener outside !');
+  selectedstatus.addEventListener('change', async () => {
+    console.log('Event listener is working!');
+   
+      let value = selectedstatus.value;
+      console.log("ss",value);
+      const response = await fetch('/admin/updateorderstatus', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ orderID: orderID, status: value }),
+      });
+
+      const resBody = await response.json();
+
+      if (resBody.isOk) {
+          window.location.reload();
+      }
+
+  });
+
+  // Initially hide/show based on the selected value
+</script>
+
+
+
+</body>
+</html>
+<%- include('../layout/adminfooter.ejs') %>

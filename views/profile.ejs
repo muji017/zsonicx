@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<%- include('./layout/userheader.ejs')%>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Profile</title>
+  <style>
+    body {
+      background-color: #ffffff;
+    }
+
+    /* Custom styles for the user profile page */
+    .main-con {
+      margin-top: 80px;
+      box-shadow: 0px 3px 3px 3px #0000004f;
+      background-color: #ffffff76;
+      color: #fff;
+      padding: 20px;
+      margin-bottom: 10px;
+    }
+
+    .card {
+      width: 12rem;
+    }
+
+    .address-container {
+      margin-top: 20px;
+    }
+
+    .left-container {
+      margin-top: 20px;
+    }
+
+    .left-container .form-group {
+      margin-bottom: 10px;
+    }
+
+    .cancel-order {
+      margin-top: 20px;
+    }
+     /* Hide the default file input button */
+  .custom-file-upload input[type="file"] {
+    display: none;
+  }
+
+  .custom-file-upload label {
+    
+  background-image: linear-gradient(#f7f8fa ,#e7e9ec);
+  border-color: #adb1b8 #a2a6ac #8d9096;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 3px;
+  box-shadow: rgba(255,255,255,.6) 0 1px 0 inset;
+  box-sizing: border-box;
+  color: #0f1111;
+  cursor: pointer;
+  display: inline-block;
+  font-family: "Amazon Ember",Arial,sans-serif;
+  font-size: 14px;
+  height: 29px;
+  /* width: 80px; */
+  font-size: 13px;
+  outline: 0;
+  overflow: hidden;
+  padding: 0 11px;
+  text-align: center;
+  text-decoration: none;
+  text-overflow: ellipsis;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  white-space: nowrap;
+}
+  .address-container {
+    background-color: #ffffff;
+    box-shadow: 2px 2px 5px 2px rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+
+  .address-container input[type="text"],
+  .left-container input[type="text"],
+  .left-container input[type="email"],
+  .left-container input[type="password"] {
+    background-color: #f7f8fa;
+    border-color: #adb1b8 #a2a6ac #8d9096;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 3px;
+    box-sizing: border-box;
+    color: #000000;
+    padding: 10px;
+    width: 100%;
+  }
+  .address-container label{
+     color: #000;
+  }
+  .address-container button[type="submit"],
+  .left-container button[type="submit"] {
+    background-color: #f28123;
+    border: none;
+    color: #000000;
+    font-weight: bold;
+    padding: 10px 20px;
+    margin-top: 10px;
+    cursor: pointer;
+  }
+
+</style>
+
+</head>
+
+<body>
+  <!-- breadcrumb-section -->
+  <div class="breadcrumb-section " style="background-image: url(/public/images/appimages/IMG_6926\ \(2\)\ \(1\).JPG)">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 offset-lg-2 text-center">
+          <div class="breadcrumb-text">
+            <p>Welcome back</p>
+            <h1><%-user.name%></h1>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- end breadcrumb section -->
+  <div class="pt-5">
+  <marquee class="marq" behavior="alternate" ><a href="" class="btn"
+    style="color: #fff;font-weight: bold; background-color:rgb(242, 129, 35); ;  "
+    data-toggle="modal" data-target="#referenceModal">Reference Link</a></marquee>
+  </div>
+  <div class="modal fade mt-80" id="referenceModal" tabindex="-1" role="dialog"
+  aria-labelledby="addCouponModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #000;">
+        <h5 class="modal-title" style="color: rgb(242, 129, 35);" id="">Here's your link</h5>
+        <button type="button" style="color: rgb(242, 129, 35);" class="close" data-dismiss="modal"
+          aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" style="text-align: center;">
+        <label>Reference: <textarea style="width: 100%;" readonly id="clipboard-input"><%= user.reference %></textarea></label>
+       <a href="" class="btn copy-btn mb-5"
+       style="color: #fff;font-weight: bold; background-color:rgb(242, 129, 35); ;  "
+       data-toggle="modal" data-target="#referenceModal" data-reference="<%=user.reference%>">Copy</a>
+     
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+  <div class="container main-con mt-3">
+    <div class="container-fluid">
+      <div class="d-flex justify-content-center row p-2" style="color: aliceblue;">
+        <div class="card mt-4 p-0  col-8 col-lg-3 col-md-6 left-container container-fluid"style="text-align: center;" >
+          <form action="/uploadprofpic" enctype="multipart/form-data" id="profile-pic-form">
+            <div class="card-body">
+            <% if (user.image) { %>
+            <div class=" " style=" border: none; text-align: center;">
+              <img src="/public/images/user/<%=user.image%>" width="200px" height="200px" alt="Profile Picture">
+              <label class="custom-file-upload">
+                <label>Change Picture<input type="file" id="profile-pic-input" name="image" id="image"></label>
+              </label>
+            </div>
+            <% } else { %>
+            <div class="card-body" style="width: 100%; border: none; text-align: center;">
+              <i class="fas fa-user-circle fa-6x"></i>
+              <label class="custom-file-upload">
+                <label>Upload Picture<input type="file" id="profile-pic-input" name="image" id="image"></label>
+              </label>
+            </div>
+            <% } %>
+          </form>
+          <div class=""   >
+            <h5 class="">Name: <%=user.name %></h5>
+            <div class="">
+              <p class="phone">Phone: <%=user.mobile%></p>
+              <p class="email" >Email: <%=user.email%></p>
+            </div>
+          </div>
+          </div>
+        </div>
+        
+        <% if (address.length > 0) { %>
+          
+            <% for (let i = 0; i < address.length; i++) { %>
+              <div class=" mt-4 col-4 col-md-6 col-lg-3 p-5 m-0 right-container">
+                <div class=" ">
+                  <h5><%= address[i].head %></h5>
+                  <p>Street: <%= address[i].street %></p>
+                  <p>City: <%= address[i].city %></p>
+                  <p>Pincode: <%= address[i].pincode %></p>
+                  <p>State: <%= address[i].state %></p>
+                  <p>Country: <%= address[i].country %></p>
+                  <a href="/deleteaddress?index=<%= i %>" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete <%= address[i].head %> address?')">Delete</a> 
+                </div>
+              </div>
+            <% } %>
+          
+        <% } %>
+        
+
+      </div>
+      <div class="row">
+        <div class="col-md-6 left-container" style="color: aliceblue;">
+          <!-- Add Address section -->
+          <div class="address-container ">
+            <h3 style="background-color:rgba(0, 0, 0, 0.034) ; color:#F28123;; width: 100%; padding: 20px;">Add Address</h3>
+            <%if(typeof message!=='undefined'){%><a style="color: #F28123;"><%=message%></a> <%}%>
+            <form action="/addaddress" method="post" id="address-form">
+              <div class="form-group">
+                <label for="street">Address:</label>
+                <input type="text" class="form-control" name="head" id="head" required="" placeholder="Enter street">
+              </div>
+              <div class="form-group">
+                <label for="street">Street:</label>
+                <input type="text" class="form-control" name="street" id="street" required=""
+                  placeholder="Enter street">
+              </div>
+              <div class="form-group">
+                <label for="city">City:</label>
+                <input type="text" class="form-control" name="city" id="city" required="" placeholder="Enter city">
+              </div>
+              <div class="form-group">
+                <label for="city">Pincode:</label>
+                <input type="text" class="form-control" id="pincode" name="pincode" required=""
+                  placeholder="Enter pincode">
+              </div>
+              <div class="form-group">
+                <label for="city">State:</label>
+                <input type="text" class="form-control" id="state" name="state" required=""
+                  placeholder="Enter state">
+              </div>
+              <div class="form-group">
+                <label for="country">Country:</label>
+                <input type="text" class="form-control" id="country" name="country" required=""
+                  placeholder="Enter country">
+              </div>
+              <button type="submit" class="btn btn-primary" 
+              style="color: #fff;font-weight: bold; background-color:rgb(242, 129, 35);  ">Add Address</button>
+            </form>
+          </div>
+        </div>
+
+        <div class="col-md-6 left-container mt-4">
+          <!-- Edit Profile section -->
+          <div class="address-container">
+        
+            <h3 style="background-color: rgba(0, 0, 0, 0.034) ; color:#F28123;; width: 100%; padding: 20px;">Edit Profile</h3>
+            
+            <form action="/savechanges" method="post">
+              <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" value="<%=user.name%>" class="form-control" name="name" id="name"
+                  placeholder="Enter name">
+              </div>
+              <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" value="<%=user.email%>" class="form-control" name="email" id="email"
+                  placeholder="Enter email">
+              </div>
+              <div class="form-group">
+                <label for="phone">Phone:</label>
+                <input type="text" value="<%=user.mobile%>" class="form-control" name="mobile" id="mobile"
+                  placeholder="Enter phone">
+              </div>
+              <button type="submit" class="btn btn-primary" 
+              style="color: #fff;font-weight: bold; background-color:rgb(242, 129, 35);  ">Save Changes</button>
+            </form>
+            <form action="/changepassword" method="post">
+              <div class="form-group mt-3">
+                <label for="phone"> New Password:</label>
+                <input type="password" class="form-control" name="password" id="passsword"
+                  placeholder="Enter new passwprd">
+              </div>
+              <button type="submit" class="btn btn-primary" 
+              style="color: #fff;font-weight: bold; background-color:rgb(242, 129, 35);  ">Change Password</button>
+            </form>
+
+            <div class="modal fade mt-80" id="walletModal" tabindex="-1" role="dialog"
+            aria-labelledby="addCouponModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header" style="background-color: #000;">
+                  <h5 class="modal-title" style="color: rgb(242, 129, 35);" id="">Your Wallet</h5>
+                  <button type="button" style="color: rgb(242, 129, 35);" class="close" data-dismiss="modal"
+                    aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                 <p>Balance : <%=user.wallet%> ₹</p>
+      
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+            <div class="container mt-3 text-center">
+              <div class="cart-table-container">
+                <div class="cart-table" style="background-color: #ffffff; box-shadow: 2px 2px 5px 2px rgba(0, 0, 0, 0.3);">
+                  <div class="cart-table-head">
+                    <div class="table-head-row">
+                      <div class="cart-table-head " style="font-weight: bold; color: #000; text-align: center;">Here's your wallet</div>
+                    </div>
+                  </div>
+                  <div class="cart-table-body p-2">
+                    <div class="table-row">
+                      <div>
+                        <a href="" class="btn"
+                        style="color: #fff;font-weight: bold; background-color:rgb(242, 129, 35); ;  "
+                        data-toggle="modal" data-target="#walletModal">Check Wallet</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+<script>
+document.getElementById('profile-pic-form').addEventListener('change', function(event) {
+  event.preventDefault(); // Prevent default form submission
+
+  // Get the form data
+  const formData = new FormData(this);
+
+  // Send the AJAX request
+  fetch('/uploadprofpic', {
+    method: 'POST',
+    body: formData
+  })
+    .then(response => response.json())
+    .then(data => {
+      // Handle the response data
+      console.log(data);
+      location.reload();
+      // Perform any necessary operations with the received data
+    })
+    .catch(error => {
+      // Handle any errors that occur during the request
+      console.error(error);
+    });
+});
+
+  var marquee = document.querySelector('.marq');
+  marquee.addEventListener('mouseover', function() {
+    this.stop();
+  });
+  marquee.addEventListener('mouseout', function() {
+    this.start();
+  });
+  const copyBtn = document.querySelector('.copy-btn');
+  const clipboardInput = document.getElementById('clipboard-input');
+
+  copyBtn.addEventListener('click', () => {
+    clipboardInput.select();
+    clipboardInput.setSelectionRange(0, 99999); // For mobile devices
+
+    try {
+      const successful = document.execCommand('copy');
+      const message = successful ? 'Copied!' : 'Unable to copy. Please select and copy manually.'
+      console.log(message); // You can also display the message in an alert or modify the button text
+    } catch (err) {
+      console.error('Unable to copy.', err);
+    }
+  });
+</script>
+</html>
+<%- include('./layout/userfooter.ejs')%>

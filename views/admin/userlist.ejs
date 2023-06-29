@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<%- include('../layout/adminheader.ejs')%>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- <link rel="stylesheet" href="/public/stylesheet/login.css"> -->
+    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!-- <link rel="stylesheet" href="../public/stylesheet/home.css"> -->
+    <style>
+      .nav-link.users{
+            color: rgb(242, 129, 35);
+     }
+     .dataTables_filter{
+        text-align: right;
+     }
+         </style>
+</head>
+<body>
+
+            <!-- breadcrumb-section -->
+            <div class="breadcrumb-section " style="background-image: url(/public/images/appimages/IMG_6926\ \(2\)\ \(1\).JPG)">
+            </div>
+            <!-- end breadcrumb section -->
+    <div class="container-fluid ">
+    <div class="container mt-2" style="position: relative;">
+        <div class="" style="position: absolute;right: 0;">
+            <button class="btn btn-secondary" onclick="history.back()">Go Back</button>
+            </div>
+        </div>
+</div>
+    <section class="">
+
+        <div class="container mt-80 mb-80">
+            <div class="container-fluid">
+            <table class="table mt-4" id="table1" style="color: rgb(167, 166, 166);">
+                <thead>
+                    <tr style="color: rgb(109, 109, 109);">
+                        <th scope="col">Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Mobile</th>
+                        <th scope="col">Image</th>
+                        <th scope="col">Verification</th>
+                        <th scope="col">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <% if (users.length> 0) {
+                    for(let i=0; i<users.length; i++) { %>
+                        <tr>
+                            <td>
+                                <%= users[i].name %>
+                            </td>
+                            <td>
+                                <%= users[i].email %>
+                            </td>
+                            <td>
+                                <%= users[i].mobile %>
+                            </td>
+                            <td><img src="/images/user/<%= users[i].image %>" width="40px" height="40px"
+                                    alt="<%= users[i].image %>"></td>
+                            <td>
+                                <% if(users[i].is_verified==0) { %>
+                                    <p>Not Verified</p>
+                                    <% }else { %>
+                                        <p>Verified</p>
+                                        <% } %>
+                            </td> 
+                           
+                            <td>
+                                <% if(users[i].is_blocked==0){%>
+                                <a href="/admin/blockuser?id=<%= users[i]._id %>" class="btn btn-danger"  onclick="return confirm('Are you sure you block <%=users[i].name%>')" style="width: 80px;">Block</a>
+                                    <%} else{%>
+                                <a href="/admin/unblockuser?id=<%= users[i]._id %>" class="btn btn-primary" onclick="return confirm('Unblock <%=users[i].name%>')"  style="width: 80px;">Unblock</a>
+                                        <% }%>
+                            </td>
+
+                        <% } } else { %>
+                            <tr>
+                                <td colspan="5">Users Not Found</td>
+                            </tr>
+                            <% } %>
+
+                        </tbody>
+                 </table></div>       </div>
+
+    </section>
+    
+    <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
+    <script>
+
+        $(function () {
+          $('#table1').DataTable();
+        });
+      
+      </script>
+</body>
+</html>
+<%- include('../layout/adminfooter.ejs') %>

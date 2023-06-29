@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="text">
+    <button onclick="invoiceGenerate()">invoice</button>
+    
+    <script src="https://cdn.jsdelivr.net/npm/easyinvoice/dist/easyinvoice.min.js"></script>
+    <script src="https://unpkg.com/easyinvoice/dist/easyinvoice.min.js"></script>
+<script>
+
+const order = <%- JSON.stringify(order) %>;
+const products = <%- JSON.stringify(products) %>;
+const orderdate=<%- JSON.stringify(orderdate) %>;
+
+function invoiceGenerate(){
+    let invoiceProducts=[]
+    for (let i = 0; i < products.length; i++) {
+        invoiceProducts.push({
+            "quantity":products[i].quantity ,
+            "description": products[i].brand,
+            "tax-rate": 6,
+            "price": products[i].price
+        })
+    }
+    
+var data = {
+    // Customize enables you to provide your own templates
+    // Please review the documentation for instructions and examples
+    "customize": {
+        //  "template": fs.readFileSync('template.html', 'base64') // Must be base64 encoded html 
+    },
+    "images": {
+        // The logo on top of your invoice
+        "logo": "https://public.easyinvoice.cloud/img/logo_en_original.png",
+        // The invoice background
+        "background": "https://public.easyinvoice.cloud/img/watermark-draft.jpg"
+    },
+    // Your own data
+    "sender": {
+        "company": "Zsonicx",
+        "address": "HighRoad Thrissur",
+        "zip": "680501",
+        "city": "Thrissur",
+        "country": "India"
+        //"custom1": "custom value 1",
+        //"custom2": "custom value 2",
+        //"custom3": "custom value 3"
+    },
+    // Your recipient
+    "client": {
+        "company": order.address[0].name,
+        "email":order.address[0].email,
+        "phone":order.address[0].phone,
+        "address": order.address[0].head,
+        "street":order.address[0].Street,
+        "city":order.address[0].city,
+        "zip": order.address[0].pincode,
+        "state": order.address[0].state,
+        "country":order.address[0].state,
+        // "custom1": "custom value 1",
+        // "custom2": "custom value 2",
+        // "custom3": "custom value 3"
+    },
+    "information": {
+        // Invoice number
+        "number": order._id,
+        // Invoice data
+        "date":orderdate,
+        "due-date": ""
+
+    },
+    // The products you would like to see on your invoice
+    // Total values are being calculated automatically
+    "products": invoiceProducts,
+    // The message you would like to display on the bottom of your invoice
+    "bottom-notice": "Thanks for purchasing from us..",
+        
+    // Settings to customize your invoice
+    "settings": {
+        "currency": "INR" 
+         // See documentation 'Locales and Currency' for more info. Leave empty for no currency.
+        // "locale": "nl-NL", // Defaults to en-US, used for number formatting (See documentation 'Locales and Currency')        
+        // "margin-top": 25, // Defaults to '25'
+        // "margin-right": 25, // Defaults to '25'
+        // "margin-left": 25, // Defaults to '25'
+        // "margin-bottom": 25, // Defaults to '25'
+        // "format": "A4", // Defaults to A4, options: A3, A4, A5, Legal, Letter, Tabloid
+        // "height": "1000px", // allowed units: mm, cm, in, px
+        // "width": "500px", // allowed units: mm, cm, in, px
+        // "orientation": "landscape", // portrait or landscape, defaults to portrait
+    },
+    // Translate your invoice to your preferred language
+    "translate": {
+        // "invoice": "FACTUUR",  // Default to 'INVOICE'
+        // "number": "Nummer", // Defaults to 'Number'
+        // "date": "Datum", // Default to 'Date'
+        // "due-date": "Verloopdatum", // Defaults to 'Due Date'
+        // "subtotal": "Subtotaal", // Defaults to 'Subtotal'
+        // "products": "Producten", // Defaults to 'Products'
+        // "quantity": "Aantal", // Default to 'Quantity'
+        // "price": "Prijs", // Defaults to 'Price'
+        // "product-total": "Totaal", // Defaults to 'Total'
+        // "total": "Totaal", // Defaults to 'Total'
+        // "vat": "btw" // Defaults to 'vat'
+    },
+};
+
+
+     // Create your invoice! Easy!
+    
+    easyinvoice.createInvoice(data, function (result) {
+        // The response will contain a base64 encoded PDF file
+        console.log('PDF base64 string: ', result.pdf);
+        var base64Data = result.pdf;
+    
+
+    //Convert the base64 data to a Blob object
+        var byteCharacters = atob(base64Data);
+        var byteNumbers = new Array(byteCharacters.length);
+        for (var i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        var byteArray = new Uint8Array(byteNumbers);
+        var blob = new Blob([byteArray], { type: 'application/pdf' });
+
+        // Create a temporary download link and trigger the download
+        var link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'invoice.pdf';
+        link.click()
+    })
+}
+      </script>
+
+</body>
+</html>
