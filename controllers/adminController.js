@@ -196,7 +196,7 @@ const blockuser=async(req,res)=>{
         res.render('error', { error: error.message });
     }
 };
-// unblocking user
+// unblocking user 
 const unblockuser=async(req,res)=>{
     try{
         const id=req.query.id;
