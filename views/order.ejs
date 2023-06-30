@@ -73,15 +73,7 @@
         <table class="table">
           <thead style="position:sticky;background-color: #00000014; top:0;">
             
-                <% if(typeof message !== 'undefined') { %>
-                  <tr>
-                    <th>
-                <p style="color: red;">
-                  <%= message %>
-                </p>
-              </th>
-            </tr>
-                <% } %>
+               
               
             <tr style="background-color: #00000014; ">
              
@@ -100,6 +92,15 @@
             </tr>
           </thead>
           <tbody>
+             <% if(typeof message !== 'undefined') { %>
+                  <tr>
+                    <th>
+                <p style="color: #F28123;">
+                  <%= message %>
+                </p>
+              </th>
+            </tr>
+                <% } %>
             <% if (orderdata.length >= 0) { let k = 1; %>
             <% for(let i = 0; i < orderdata.length; i++) { %>
             <tr style="background-color: #00000014; ">

@@ -51,6 +51,10 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <% if(typeof message!=='undefined'){%>
+                        <p><%=message%></p>
+                    
+                       <% } else{%>
                     <% if (product.length> 0) {
                         for(let i=0; i<product.length; i++) { %>
                             <tr style="text-align: left;">
@@ -78,7 +82,7 @@
                                 <tr>
                                     <td colspan="5">Categories Not Found</td>
                                 </tr>
-                                <% } %> 
+                                <% }} %> 
     
                             </tbody>
 </table>

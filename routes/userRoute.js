@@ -109,6 +109,6 @@ userroute.get('/error',usercontroller.errorpage);
 
 userroute.post('/uploadprofpic',auth.isLogin,upload.single('image'),usercontroller.uploadprofpic)
 
-userroute.get('*',usercontroller.unmatch);
+
 
 module.exports=userroute;

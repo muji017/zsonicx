@@ -47,9 +47,13 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <% if(typeof message!=='undefined'){%>
+                        <p><%=message%></p>
+                    
+                       <% } else{%>
                 <% if (users.length> 0) {
                     for(let i=0; i<users.length; i++) { %>
-                        <tr>
+                        <tr style="color: black !important;">
                             <td>
                                 <%= users[i].name %>
                             </td>
@@ -81,7 +85,7 @@
                             <tr>
                                 <td colspan="5">Users Not Found</td>
                             </tr>
-                            <% } %>
+                            <% }} %>
 
                         </tbody>
                  </table></div>       </div>

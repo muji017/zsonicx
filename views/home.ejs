@@ -49,8 +49,10 @@
 								<p class="subtitle">Get your Game on</p>
 								<h1>Heading to the top</h1>
 								<div class="hero-btns">
+									<%if(typeof message=='undefined'){%>
 									<a href="/viewproduct/?id=<%=category[0]._id%>" class="boxed-btn">More
 										categories</a>
+									<%}%>	
 									<a href="contact.html" class="bordered-btn">Contact Us</a>
 								</div>
 							</div>

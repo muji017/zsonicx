@@ -37,10 +37,7 @@
             
             <table id="table1" class="table mt-4" style="color: #000;">
                 <thead>
-                    <% if(typeof message!=='undefined'){%>
-                    <p><%=message%></p>
-                
-                   <% }%>
+                  
                     <tr style="color: #000;">
                         <th scope="col">No</th>
                         <th scope="col">Date</th>
@@ -53,6 +50,10 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <% if(typeof message!=='undefined'){%>
+                        <p><%=message%></p>
+                    
+                       <% } else{%>
                     <% if (orderdetails.length> 0)  { let k=1
                         for(let i=orderdetails.length-1; i>=0; i--) {  %>
                             <tr>
@@ -90,7 +91,7 @@
                                 <tr>
                                     <td colspan="5">Products Not Found</td>
                                 </tr>
-                                <% } %> 
+                                <% }} %> 
     
                             </tbody>
                           </table>

@@ -171,7 +171,7 @@ const loginpost = async (req, res) => {
         }
 
     } catch (error) {
-        console.log(error.message);
+        
         res.render('error', { error: error.message });
     }
 };
@@ -189,7 +189,14 @@ const home = async (req, res) => {
 
         if(!req.query.key){
             const category=await Category.find({});
+            if(category.length>0){
+                
             res.render('home',{category:category});
+            }
+            else{
+               
+                res.render('home',{category:"",message:"No categories"});
+            }
         }
         else{
             const key = req.query.key;
@@ -536,6 +543,7 @@ const otpconformpost = async (req, res) => {
 const viewproduct = async (req, res) => {
   try {
     const allCategory = await Category.find({});
+    if(allCategory.length>0){
     let category_id = req.query.id;
     if(!category_id){
 
@@ -642,6 +650,14 @@ const viewproduct = async (req, res) => {
               sort
           });
       }
+    }
+    else{
+       
+        res.render('viewproduct', {
+           message:"No items to display",
+           category:""
+        });
+    }
   } catch (error) {
       if (req.headers['content-type'] === 'application/json') {
           // If the request is for JSON response
@@ -766,7 +782,6 @@ const deletecart = async (req, res) => {
 
             await userCart.save(); // Save the updated cart
            
-            // console.log(`Product quantity decreased: ${userCart.products[index].quantity}`);
         }
 
         res.redirect('/cart');
@@ -1033,7 +1048,7 @@ const orders = async (req, res) => {
 
         const count = await orderCountQuery.exec();
 
-        if (order) {
+        if (order.length>0) {
             let orderDetails = order.map(ord => {
               const orderDate = new Date(ord.orderdate); // Convert orderdate to a Date object
               const year = orderDate.getFullYear();
@@ -1087,7 +1102,10 @@ const orders = async (req, res) => {
         } else {
             res.render('order', {
                 message: 'No items ordered yet',
-                orderdata: ''
+                orderdata: '',
+                totalpages: 1,
+                key:'',
+                currentpage: "",
             });
         }
     } catch (error) {

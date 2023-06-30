@@ -1,5 +1,6 @@
 const mongoose=require('mongoose');
-mongoose.connect('mongodb://0.0.0.0:27017/zsonicx');
+mongoose.connect('mongodb+srv://mujeebrahmanps01707:ruzo4mjVv0WDCyor@cluster0.tpfodys.mongodb.net/',
+console.log('connnnnnected'));
 const userroute=require('./routes/userRoute');
 const adminroute=require('./routes/adminRoute');
 const nocache=require('nocache');

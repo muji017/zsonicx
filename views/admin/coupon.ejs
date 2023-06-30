@@ -98,7 +98,10 @@
                         </tr>
                     </thead>
                     <tbody>
-                         
+                        <% if(typeof messageempty!=='undefined'){%>
+                            <p><%=messageempty%></p>
+                        
+                           <% } else{%>
                         <% if(coupon.length > 0) {
                             for(let i = 0; i < coupon.length; i++) { %>
                                 <tr>
@@ -159,7 +162,7 @@
                                 <tr>
                                     <td colspan="5">Page is empty</td>
                                 </tr>
-                            <% } %> 
+                            <% }}%> 
                     </tbody>
                 </table>
             </div>

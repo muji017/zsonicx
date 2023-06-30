@@ -13,6 +13,7 @@ const sharp=require('sharp');
 const ejs=require('ejs');
 const pdf=require('html-pdf');
 const fs=require('fs');
+const { log } = require('console');
 // const { response } = require('../routes/adminRoute');
 
 // verify mail
@@ -180,7 +181,11 @@ const resetpassword=async(req,res)=>{
 const userlist=async(req,res)=>{
     try{
         const userList=await User.find({});
+        if(userList.length>0){
         res.render('userlist',{users:userList});
+        }else{
+            res.render('userlist',{users:"",message:"No users to display"});   
+        }
     }catch(error){
         res.render('error', { error: error.message });
     }
@@ -222,7 +227,7 @@ const addproducts=async(req,res)=>{
 // add products post 
 const addproductspost=async(req,res)=>{
     if(req.isFileValid) {
-        console.log('File is valid');
+       
         try {    
                const product = new Product({
                 name: req.body.name,
@@ -268,12 +273,13 @@ const product=async(req,res)=>{
     try{
         const category=await Category.find({});  
         const product=await Product.find({}).populate('category');
-        
-        if(product){
+    
+        if(product.length>0){
+           
             res.render('products',{product:product,category:category});
         }
         else{
-            res.render('products',{message:'There is no product to display'});
+            res.render('products',{product:"",message:'There is no product to display'});
         }
     }catch(error){
     
@@ -371,7 +377,12 @@ const updateproducts = async (req, res) => {
 const category=async(req,res)=>{
     try{
         const product=await Category.find({});
+        if(product.length>0){
         res.render('category',{product:product});
+        }
+        else{
+            res.render('category',{product:"",message:"No items to display"});  
+        }
     }catch(error){
         res.render('error', { error: error.message });
     }
@@ -490,7 +501,7 @@ const orders = async (req, res) => {
             });
             res.render('orders', { orderdetails: orderDetails });
         } else {
-            res.render('orders', { message: 'No orders' });
+            res.render('orders', { message: 'No orders',orderdetails:'' });
         }
     } catch (error) {
         res.render('error', { error: error.message });
@@ -566,7 +577,7 @@ const deleteimage=async(req,res)=>{
     }
 
     catch(error){
-        console.log(error.message);
+       
         res.render('error',{message:error.message});
     }
 };
@@ -591,8 +602,11 @@ const coupon=async(req,res)=>{
             req.session.updated='';
         }
       
-
+       if(coupon.length>0){
         res.render('coupon',{coupon:coupon,message,date:couponDetails});
+       }else{
+        res.render('coupon',{coupon:"",messageempty:"There is no coupons",date:""});
+       }
     }catch(error){
         res.render('error', { error: error.message });
     }
@@ -622,13 +636,13 @@ const addcoupon=async(req,res)=>{
                 price:req.body.price,date:req.body.date});
     
         if(coupon){
-            console.log('coupon added');
+            
             req.session.updated='Coupon Added Successfully';
         }
 
         res.redirect('/admin/coupon');
     }catch(error){
-        console.log(error.message);
+       
         res.render('error', { error: error.message });
     }
 };
