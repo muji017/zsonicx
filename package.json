@@ -26,7 +26,7 @@
     "nocache": "^3.0.4",
     "nodemailer": "^6.9.2",
     "randomstring": "^1.2.3",
-    "razorpay": "^2.8.6",
+    "razorpay": "^2.9.0",
     "sharp": "^0.32.1",
     "sweetalert": "^2.1.2"
   },
