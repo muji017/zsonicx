@@ -107,6 +107,7 @@
                         style="background-color: #747470;font-size: small">Week sales</a>
                     <a href="/admin/getMonthSales" class="btn btn mx-2 my-3"
                         style="background-color: #747470;font-size: small">Monthly sales</a>
+                        
                     <a href="/admin/getYearSales" class="btn btn mx-2 my-3"
                         style="background-color: #747470;font-size: small">Year sales</a>
                     <div style="margin-left: auto;" class="mt-3">
@@ -125,9 +126,10 @@
                 </div>
                 <h4 class="mt-2 ms-2">Total:₹<%=totalAmount%>
                 </h4>
-                <a href="/admin/salespdf" class="btn btn "
-                    style="background-color: rgb(242, 129, 35);color: #ffffff; font-size: small;">Download PDF</a>
-
+                <form action="/admin/salespdf" method="post">
+                <input type="submit" class="btn btn "
+                    style="background-color: rgb(242, 129, 35);color: #ffffff; font-size: small;" value="Download PDF">
+                </form>
                 <%if(orders){%>
                     <div class=" mt-5">
 

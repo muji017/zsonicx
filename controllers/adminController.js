@@ -935,7 +935,7 @@ const salespdf = async (req, res) => {
     try {
       const orderdata = await Order.find({});
       let total = 0;
-      let orders = orderdata.map(ord => {
+      let orders = orderdata.map((ord) => {
         total += ord.totalamount;
   
         const orderDate = new Date(ord.orderdate);
@@ -952,41 +952,32 @@ const salespdf = async (req, res) => {
           payment: ord.paymentmethod,
           orderdate: `${date}/${month}/${year}`,
           delivereddate: ord.delivereddate,
-          return: ord.return.status
+          return: ord.return.status,
         };
       });
   
       const data = {
         orders: orders,
-        total: total
+        total: total,
       };
   
       const filePathName = path.resolve(__dirname, '../views/admin/salespdf.ejs');
       const htmlString = fs.readFileSync(filePathName).toString();
       const option = {
         format: 'A3',
-        orientation:"portrait",
-        border:"10mm"
+        orientation: 'portrait',
+        border: '10mm',
       };
   
       const ejsData = ejs.render(htmlString, data);
-      pdf.create(ejsData, option).toFile('sales.pdf', (err, response) => {
+      pdf.create(ejsData, option).toStream((err, stream) => {
         if (err) {
-            return res.status(500).send(err)
-        } 
-        else {
-            const filePath =path.resolve(__dirname,'../sales.pdf');
-            fs.readFile(filePath,(err,file)=>{
-                if(err){
-                   return res.status(500).send(err)
-                }
-                res.setHeader('Content-Type','application/pdf');
-                res.setHeader('Content-Disposition','attachment;filename="sales.pdf"');
-
-                res.send(file);
-            })
-
+          return res.status(500).send(err);
         }
+  
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', 'attachment;filename="sales.pdf"');
+        stream.pipe(res);
       });
     } catch (error) {
       res.render('error', { error: error.message });
