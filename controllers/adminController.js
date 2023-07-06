@@ -12,7 +12,6 @@ const path=require('path');
 const sharp=require('sharp');
 
 const ejs=require('ejs');
-const pdf=require('html-pdf');
 const fs=require('fs');
 const { log } = require('console');
 // const { response } = require('../routes/adminRoute');
