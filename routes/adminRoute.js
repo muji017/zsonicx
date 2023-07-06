@@ -162,7 +162,7 @@ adminroute.get('/getYearSales',auth.isLoginAdmin,admincontroller.currentyearsale
 
 adminroute.post('/saleswithDate',auth.isLoginAdmin,admincontroller.saleswithdate);
 
-adminroute.post('/salespdf',auth.isLoginAdmin,admincontroller.salespdf);
+adminroute.post('/salespdf',auth.isLoginAdmin,admincontroller.downloadSalesReport);
 
 adminroute.get('*',admincontroller.unmatch);
   

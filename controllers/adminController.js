@@ -6,6 +6,7 @@ const nodemailer=require('nodemailer');
 const dotenv=require('dotenv').config();
 const Order=require('../model/orderModel');
 const Coupon=require('../model/couponModel');
+const pdfmake=require('pdfmake')
 
 const path=require('path');
 const sharp=require('sharp');
@@ -930,57 +931,125 @@ const unmatch=async(req, res) => {
   }
 
 //sales report convet pdf
-
-const salespdf = async (req, res) => {
+  
+  const downloadSalesReport = async (req, res) => {
     try {
-      const orderdata = await Order.find({});
-      let total = 0;
-      let orders = orderdata.map((ord) => {
-        total += ord.totalamount;
-  
-        const orderDate = new Date(ord.orderdate);
-        const year = orderDate.getFullYear();
-        const month = orderDate.getMonth() + 1;
-        const date = orderDate.getDate();
-  
-        return {
-          orderid: ord._id,
-          name: ord.address[0].name,
-          phone: ord.address[0].phone,
-          totalamount: ord.totalamount,
-          status: ord.status,
-          payment: ord.paymentmethod,
-          orderdate: `${date}/${month}/${year}`,
-          delivereddate: ord.delivereddate,
-          return: ord.return.status,
-        };
+      let startY = 150;
+      const writeStream = fs.createWriteStream("order.pdf");
+      const printer = new pdfmake({
+        Roboto: {
+          normal: "Helvetica",
+          bold: "Helvetica-Bold",
+          italics: "Helvetica-Oblique",
+          bolditalics: "Helvetica-BoldOblique",
+        },
       });
   
-      const data = {
-        orders: orders,
-        total: total,
-      };
+      const order = await Order.find({ status: { $in: ["Pending", "Delivered", "Shipping"] } })
+        .lean()
+        .exec();
   
-      const filePathName = path.resolve(__dirname, '../views/admin/salespdf.ejs');
-      const htmlString = fs.readFileSync(filePathName).toString();
-      const option = {
-        format: 'A3',
-        orientation: 'portrait',
-        border: '10mm',
-      };
+      console.log("orders", order);
+      const totalAmount = await Order.aggregate([
+        {
+          $match: {
+            status: { $nin: ["returned", "order cancelled"] },
+          },
+        },
+        {
+          $group: {
+            _id: null,
+            totalAmount: { $sum: "$totalamount" },
+          },
+        },
+      ]);
   
-      const ejsData = ejs.render(htmlString, data);
-      pdf.create(ejsData, option).toStream((err, stream) => {
-        if (err) {
-          return res.status(500).send(err);
-        }
+      const dateOptions = { year: "numeric", month: "long", day: "numeric" };
+// Create document definition
+const docDefinition = {
+    content: [
+      { text: "Zsonicx", style: "header" },
+      { text: "\n" },
+      { text: "Order Information", style: "header1" },
+      { text: "\n" },
+      { text: "\n" },
+    ],
+    styles: {
+      header: {
+        fontSize: 25,
+        alignment: "center",
+      },
+      header1: {
+        fontSize: 12,
+        alignment: "center",
+      },
+      total: {
+        fontSize: 20,
+      },
+      fonts: {
+        RupeeFont: {
+          normal: "RupeeFont-Regular.ttf", // Path to the custom font file (e.g., TTF or OTF format)
+        },
+      },
+    },
+  };
   
-        res.setHeader('Content-Type', 'application/pdf');
-        res.setHeader('Content-Disposition', 'attachment;filename="sales.pdf"');
-        stream.pipe(res);
+  // Create the table data
+  const tableBody = [
+    ["Index", "Ordered Date", "Customer name", "Status", "Payment Method", "Amount"], // Table header
+  ];
+  
+  for (let i = 0; i < order.length; i++) {
+    const data = order[i];
+    const formattedDate = new Intl.DateTimeFormat("en-US", dateOptions).format(new Date(data.orderdate));
+    tableBody.push([
+      (i + 1).toString(), // Index value
+      formattedDate,
+      data.address[0].name,
+      data.status,
+      data.paymentmethod,
+      data.totalamount,
+    ]);
+  }
+  
+  const table = {
+    table: {
+      widths: ["auto", "auto", "auto", "auto", "auto", "auto"],
+      headerRows: 1,
+      body: tableBody,
+      alignment: "center", // Align the table at the center
+    },
+  };
+  
+  // Add the table to the document definition
+  docDefinition.content.push(table);
+  docDefinition.content.push([
+    { text: "\n" },
+    {
+      columns: [
+        { text: "\n" },
+        { text: `Total: ${totalAmount[0]?.totalAmount || 0}`, style: "total" }, // Total amount with rupee symbol aligned to the right
+      ],
+      columnGap: 5, // Set a small column gap
+    },
+  ]);
+  
+  
+      // Generate PDF from the document definition
+      const pdfDoc = printer.createPdfKitDocument(docDefinition);
+  
+      // Pipe the PDF document to a write stream
+      pdfDoc.pipe(writeStream);
+  
+      // Finalize the PDF and end the stream
+      pdfDoc.end();
+  
+      writeStream.on("finish", () => {
+        res.download("order.pdf", "order.pdf");
       });
     } catch (error) {
-      res.render('error', { error: error.message });
+      console.log(error.message);
+      res.render("error", { error: error.message });
     }
   };
   
@@ -1011,5 +1080,5 @@ module.exports={
 
     //salesreport
     salesreport,todayssales,currentweeksales,currentmonthsales,currentyearsales,saleswithdate,
-    salespdf
+    downloadSalesReport
 }; 
