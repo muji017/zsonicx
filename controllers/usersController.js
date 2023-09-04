@@ -186,16 +186,16 @@ const signup = async (req, res) => {
 // home page with sort filter search
 const home = async (req, res) => {
     try {
-
+        let loginstatus=req.session.user_id;
         if(!req.query.key){
             const category=await Category.find({});
             if(category.length>0){
                 
-            res.render('home',{category:category});
+            res.render('home',{category:category,loginstatus:loginstatus});
             }
             else{
                
-                res.render('home',{category:"",message:"No categories"});
+                res.render('home',{category:"",message:"No categories",loginstatus:loginstatus});
             }
         }
         else{
@@ -253,7 +253,7 @@ const home = async (req, res) => {
             var noitem='No items found pleace check categories';
             
       
-            res.render('home', { category: category, product: products, issearch ,noitem,totalpages,currentpage,key});
+            res.render('home', { category: category, product: products, issearch ,noitem,totalpages,currentpage,key,loginstatus:loginstatus});
         }
     
     }
@@ -542,6 +542,7 @@ const otpconformpost = async (req, res) => {
 // list of products
 const viewproduct = async (req, res) => {
   try {
+    let loginstatus=req.session.user_id;
     const allCategory = await Category.find({});
     if(allCategory.length>0){
     let category_id = req.query.id;
@@ -647,7 +648,8 @@ const viewproduct = async (req, res) => {
               totalpages,
               key,
               currentpage,
-              sort
+              sort,
+              loginstatus:loginstatus
           });
       }
     }
@@ -655,7 +657,8 @@ const viewproduct = async (req, res) => {
        
         res.render('viewproduct', {
            message:"No items to display",
-           category:""
+           category:"",
+           loginstatus:loginstatus
         });
     }
   } catch (error) {
@@ -673,9 +676,10 @@ const viewproduct = async (req, res) => {
 // single product details
 const viewproductdetails=async(req,res)=>{
     try{
+        let loginstatus=req.session.user_id;
         const product=await Product.findOne({_id:req.query.id}).populate('category');
         const allproduct=await Product.find({is_delete:0});
-        res.render('viewproductdetails',{product:product,category:product.category[0],allproduct:allproduct});
+        res.render('viewproductdetails',{product:product,category:product.category[0],allproduct:allproduct,loginstatus:loginstatus});
     }catch(error){
         res.render('error', { error: error.message });
     }

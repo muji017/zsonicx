@@ -12,6 +12,15 @@
 			font-size: 14px;
 		}
 	</style>
+	  
+	     <input type="text" hidden value="<%=loginstatus%>" id="loginstatus">
+		 <script>
+			var forLoginElement = document.getElementById('forlogin');
+			var loginstatus=document.getElementById('loginstatus').value;
+		if (!loginstatus) {
+		  forLoginElement.innerHTML = 'LOGIN';
+		}
+		 </script>
 	<!-- end header -->
 	<div class="search-area" style="height: 20px;">
 		<div class="container" style="height: 20px;">

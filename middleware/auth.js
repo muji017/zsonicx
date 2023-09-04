@@ -5,7 +5,7 @@ const isLogin =async(req,res,next)=>{
         // console.log(user);
         if(req.session.user&&user.is_blocked==0){}
         else{
-            res.redirect('/')
+            res.redirect('/login')
         }
         next()
         

@@ -8,6 +8,14 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-elevatezoom/3.0.8/jquery.elevatezoom.min.js"></script>
+<input type="text" hidden value="<%=loginstatus%>" id="loginstatus">
+<script>
+   var forLoginElement = document.getElementById('forlogin');
+   var loginstatus=document.getElementById('loginstatus').value;
+if (!loginstatus) {
+ forLoginElement.innerHTML = 'LOGIN';
+}
+</script>
 	<!-- search area -->
 	<div class="search-area">
 		<div class="container">

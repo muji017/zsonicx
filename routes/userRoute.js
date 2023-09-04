@@ -40,17 +40,17 @@ userroute.get('/signup',auth.isLogout,usercontroller.signup);
 
 userroute.get('/login',auth.isLogout,usercontroller.login);
 
-userroute.get('/',auth.isLogout,usercontroller.login);
+userroute.get('/',auth.isLogout,usercontroller.home);
 
 userroute.post('/login',usercontroller.loginpost);
 
-userroute.get('/home',auth.isLogin,usercontroller.home);
+userroute.get('/home',usercontroller.home);
 
 userroute.post('/signup',auth.isLogout,upload.single('image'), usercontroller.insertuser);
 
 userroute.get('/verify',auth.isLogout,usercontroller.verifyMail);
 
-userroute.get('/logout',usercontroller.userlogout);
+userroute.get('/logout',auth.isLogin,usercontroller.userlogout);
 
 // userroute.get('/forget',auth.isLogout,usercontroller.forget);
 
@@ -71,9 +71,9 @@ userroute.post('/otplogin',usercontroller.otploginpost);
 userroute.get('/otpconform',auth.isLogout,usercontroller.otpconform);
 userroute.post('/otpconform',usercontroller.otpconformpost);
 
-userroute.get('/viewproduct',auth.isLogin,usercontroller.viewproduct);
+userroute.get('/viewproduct',usercontroller.viewproduct);
 
-userroute.get('/viewproductdetails',auth.isLogin,usercontroller.viewproductdetails);
+userroute.get('/viewproductdetails',usercontroller.viewproductdetails);
 
 userroute.get('/cart',auth.isLogin,usercontroller.viewcart);
 userroute.get('/addtocart',auth.isLogin,usercontroller.addtocart);
