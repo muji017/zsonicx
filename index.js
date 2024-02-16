@@ -1,5 +1,5 @@
 const mongoose=require('mongoose');
-mongoose.connect('mongodb+srv://mujeebrahmanps01707:ruzo4mjVv0WDCyor@cluster0.tpfodys.mongodb.net/',
+mongoose.connect('',
 console.log('connnnnnected'));
 const userroute=require('./routes/userRoute');
 const adminroute=require('./routes/adminRoute');
